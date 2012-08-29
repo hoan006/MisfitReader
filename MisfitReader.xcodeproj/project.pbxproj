@@ -1,0 +1,603 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FC38488915EDC62800BA315F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488815EDC62800BA315F /* UIKit.framework */; };
+		FC38488B15EDC62800BA315F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488A15EDC62800BA315F /* Foundation.framework */; };
+		FC38488D15EDC62800BA315F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488C15EDC62800BA315F /* CoreGraphics.framework */; };
+		FC38488F15EDC62800BA315F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488E15EDC62800BA315F /* CoreData.framework */; };
+		FC38489515EDC62800BA315F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC38489315EDC62800BA315F /* InfoPlist.strings */; };
+		FC38489715EDC62800BA315F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38489615EDC62800BA315F /* main.m */; };
+		FC38489B15EDC62800BA315F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38489A15EDC62800BA315F /* AppDelegate.m */; };
+		FC38489E15EDC62800BA315F /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */; };
+		FC3848A115EDC62800BA315F /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */; };
+		FC3848A415EDC62800BA315F /* MisfitReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC3848A215EDC62800BA315F /* MisfitReader.xcdatamodeld */; };
+		FC3848A715EDC62800BA315F /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3848A615EDC62800BA315F /* MasterViewController.m */; };
+		FC3848AA15EDC62800BA315F /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3848A915EDC62800BA315F /* DetailViewController.m */; };
+		FC3848B215EDC62800BA315F /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC3848B115EDC62800BA315F /* SenTestingKit.framework */; };
+		FC3848B315EDC62800BA315F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488815EDC62800BA315F /* UIKit.framework */; };
+		FC3848B415EDC62800BA315F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488A15EDC62800BA315F /* Foundation.framework */; };
+		FC3848B515EDC62800BA315F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488E15EDC62800BA315F /* CoreData.framework */; };
+		FC3848BD15EDC62800BA315F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC3848BB15EDC62800BA315F /* InfoPlist.strings */; };
+		FC3848C015EDC62800BA315F /* MisfitReaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3848BF15EDC62800BA315F /* MisfitReaderTests.m */; };
+		FC3848F315EDC67D00BA315F /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FC3848F215EDC67D00BA315F /* libxml2.dylib */; };
+		FC3848F515EDC68300BA315F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FC3848F415EDC68300BA315F /* libz.dylib */; };
+		FC38491C15EDC86700BA315F /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38490115EDC86700BA315F /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38491D15EDC86700BA315F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38490315EDC86700BA315F /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38491E15EDC86700BA315F /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38490515EDC86700BA315F /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38491F15EDC86700BA315F /* AFJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38490715EDC86700BA315F /* AFJSONRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38492015EDC86700BA315F /* AFJSONUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38490915EDC86700BA315F /* AFJSONUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38492115EDC86700BA315F /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38490B15EDC86700BA315F /* AFNetworkActivityIndicatorManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38492215EDC86700BA315F /* AFPropertyListRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38490E15EDC86700BA315F /* AFPropertyListRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38492315EDC86700BA315F /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491015EDC86700BA315F /* AFURLConnectionOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38492415EDC86700BA315F /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491215EDC86700BA315F /* AFXMLRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38492515EDC86700BA315F /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491415EDC86700BA315F /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FC38492615EDC86700BA315F /* RssFeeder.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491815EDC86700BA315F /* RssFeeder.m */; };
+		FC38492715EDC86700BA315F /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491B15EDC86700BA315F /* RXMLElement.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FC3848B615EDC62800BA315F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC38487B15EDC62800BA315F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FC38488315EDC62800BA315F;
+			remoteInfo = MisfitReader;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FC38488415EDC62800BA315F /* MisfitReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MisfitReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC38488815EDC62800BA315F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FC38488A15EDC62800BA315F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FC38488C15EDC62800BA315F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		FC38488E15EDC62800BA315F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		FC38489215EDC62800BA315F /* MisfitReader-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MisfitReader-Info.plist"; sourceTree = "<group>"; };
+		FC38489415EDC62800BA315F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FC38489615EDC62800BA315F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FC38489815EDC62800BA315F /* MisfitReader-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MisfitReader-Prefix.pch"; sourceTree = "<group>"; };
+		FC38489915EDC62800BA315F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		FC38489A15EDC62800BA315F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		FC38489D15EDC62800BA315F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		FC3848A015EDC62800BA315F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		FC3848A315EDC62800BA315F /* MisfitReader.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MisfitReader.xcdatamodel; sourceTree = "<group>"; };
+		FC3848A515EDC62800BA315F /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
+		FC3848A615EDC62800BA315F /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		FC3848A815EDC62800BA315F /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		FC3848A915EDC62800BA315F /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		FC3848B015EDC62800BA315F /* MisfitReaderTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MisfitReaderTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC3848B115EDC62800BA315F /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		FC3848BA15EDC62800BA315F /* MisfitReaderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MisfitReaderTests-Info.plist"; sourceTree = "<group>"; };
+		FC3848BC15EDC62800BA315F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FC3848BE15EDC62800BA315F /* MisfitReaderTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MisfitReaderTests.h; sourceTree = "<group>"; };
+		FC3848BF15EDC62800BA315F /* MisfitReaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MisfitReaderTests.m; sourceTree = "<group>"; };
+		FC3848F215EDC67D00BA315F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		FC3848F415EDC68300BA315F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		FC38490015EDC86700BA315F /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
+		FC38490115EDC86700BA315F /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
+		FC38490215EDC86700BA315F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
+		FC38490315EDC86700BA315F /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		FC38490415EDC86700BA315F /* AFImageRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageRequestOperation.h; sourceTree = "<group>"; };
+		FC38490515EDC86700BA315F /* AFImageRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageRequestOperation.m; sourceTree = "<group>"; };
+		FC38490615EDC86700BA315F /* AFJSONRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFJSONRequestOperation.h; sourceTree = "<group>"; };
+		FC38490715EDC86700BA315F /* AFJSONRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFJSONRequestOperation.m; sourceTree = "<group>"; };
+		FC38490815EDC86700BA315F /* AFJSONUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFJSONUtilities.h; sourceTree = "<group>"; };
+		FC38490915EDC86700BA315F /* AFJSONUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFJSONUtilities.m; sourceTree = "<group>"; };
+		FC38490A15EDC86700BA315F /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
+		FC38490B15EDC86700BA315F /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		FC38490C15EDC86700BA315F /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
+		FC38490D15EDC86700BA315F /* AFPropertyListRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFPropertyListRequestOperation.h; sourceTree = "<group>"; };
+		FC38490E15EDC86700BA315F /* AFPropertyListRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFPropertyListRequestOperation.m; sourceTree = "<group>"; };
+		FC38490F15EDC86700BA315F /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
+		FC38491015EDC86700BA315F /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		FC38491115EDC86700BA315F /* AFXMLRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFXMLRequestOperation.h; sourceTree = "<group>"; };
+		FC38491215EDC86700BA315F /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
+		FC38491315EDC86700BA315F /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
+		FC38491415EDC86700BA315F /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		FC38491615EDC86700BA315F /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		FC38491715EDC86700BA315F /* RssFeeder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RssFeeder.h; sourceTree = "<group>"; };
+		FC38491815EDC86700BA315F /* RssFeeder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssFeeder.m; sourceTree = "<group>"; };
+		FC38491A15EDC86700BA315F /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
+		FC38491B15EDC86700BA315F /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FC38488115EDC62800BA315F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC3848F515EDC68300BA315F /* libz.dylib in Frameworks */,
+				FC3848F315EDC67D00BA315F /* libxml2.dylib in Frameworks */,
+				FC38488915EDC62800BA315F /* UIKit.framework in Frameworks */,
+				FC38488B15EDC62800BA315F /* Foundation.framework in Frameworks */,
+				FC38488D15EDC62800BA315F /* CoreGraphics.framework in Frameworks */,
+				FC38488F15EDC62800BA315F /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FC3848AC15EDC62800BA315F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC3848B215EDC62800BA315F /* SenTestingKit.framework in Frameworks */,
+				FC3848B315EDC62800BA315F /* UIKit.framework in Frameworks */,
+				FC3848B415EDC62800BA315F /* Foundation.framework in Frameworks */,
+				FC3848B515EDC62800BA315F /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FC38487915EDC62800BA315F = {
+			isa = PBXGroup;
+			children = (
+				FC38489015EDC62800BA315F /* MisfitReader */,
+				FC3848B815EDC62800BA315F /* MisfitReaderTests */,
+				FC38488715EDC62800BA315F /* Frameworks */,
+				FC38488515EDC62800BA315F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FC38488515EDC62800BA315F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FC38488415EDC62800BA315F /* MisfitReader.app */,
+				FC3848B015EDC62800BA315F /* MisfitReaderTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FC38488715EDC62800BA315F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FC3848F415EDC68300BA315F /* libz.dylib */,
+				FC3848F215EDC67D00BA315F /* libxml2.dylib */,
+				FC38488815EDC62800BA315F /* UIKit.framework */,
+				FC38488A15EDC62800BA315F /* Foundation.framework */,
+				FC38488C15EDC62800BA315F /* CoreGraphics.framework */,
+				FC38488E15EDC62800BA315F /* CoreData.framework */,
+				FC3848B115EDC62800BA315F /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FC38489015EDC62800BA315F /* MisfitReader */ = {
+			isa = PBXGroup;
+			children = (
+				FC3848FF15EDC86700BA315F /* AFNetworking */,
+				FC38491515EDC86700BA315F /* Models */,
+				FC38491915EDC86700BA315F /* RaptureXML */,
+				FC38489915EDC62800BA315F /* AppDelegate.h */,
+				FC38489A15EDC62800BA315F /* AppDelegate.m */,
+				FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */,
+				FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */,
+				FC3848A515EDC62800BA315F /* MasterViewController.h */,
+				FC3848A615EDC62800BA315F /* MasterViewController.m */,
+				FC3848A815EDC62800BA315F /* DetailViewController.h */,
+				FC3848A915EDC62800BA315F /* DetailViewController.m */,
+				FC3848A215EDC62800BA315F /* MisfitReader.xcdatamodeld */,
+				FC38489115EDC62800BA315F /* Supporting Files */,
+			);
+			path = MisfitReader;
+			sourceTree = "<group>";
+		};
+		FC38489115EDC62800BA315F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FC38489215EDC62800BA315F /* MisfitReader-Info.plist */,
+				FC38489315EDC62800BA315F /* InfoPlist.strings */,
+				FC38489615EDC62800BA315F /* main.m */,
+				FC38489815EDC62800BA315F /* MisfitReader-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FC3848B815EDC62800BA315F /* MisfitReaderTests */ = {
+			isa = PBXGroup;
+			children = (
+				FC3848BE15EDC62800BA315F /* MisfitReaderTests.h */,
+				FC3848BF15EDC62800BA315F /* MisfitReaderTests.m */,
+				FC3848B915EDC62800BA315F /* Supporting Files */,
+			);
+			path = MisfitReaderTests;
+			sourceTree = "<group>";
+		};
+		FC3848B915EDC62800BA315F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FC3848BA15EDC62800BA315F /* MisfitReaderTests-Info.plist */,
+				FC3848BB15EDC62800BA315F /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FC3848FF15EDC86700BA315F /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				FC38490015EDC86700BA315F /* AFHTTPClient.h */,
+				FC38490115EDC86700BA315F /* AFHTTPClient.m */,
+				FC38490215EDC86700BA315F /* AFHTTPRequestOperation.h */,
+				FC38490315EDC86700BA315F /* AFHTTPRequestOperation.m */,
+				FC38490415EDC86700BA315F /* AFImageRequestOperation.h */,
+				FC38490515EDC86700BA315F /* AFImageRequestOperation.m */,
+				FC38490615EDC86700BA315F /* AFJSONRequestOperation.h */,
+				FC38490715EDC86700BA315F /* AFJSONRequestOperation.m */,
+				FC38490815EDC86700BA315F /* AFJSONUtilities.h */,
+				FC38490915EDC86700BA315F /* AFJSONUtilities.m */,
+				FC38490A15EDC86700BA315F /* AFNetworkActivityIndicatorManager.h */,
+				FC38490B15EDC86700BA315F /* AFNetworkActivityIndicatorManager.m */,
+				FC38490C15EDC86700BA315F /* AFNetworking.h */,
+				FC38490D15EDC86700BA315F /* AFPropertyListRequestOperation.h */,
+				FC38490E15EDC86700BA315F /* AFPropertyListRequestOperation.m */,
+				FC38490F15EDC86700BA315F /* AFURLConnectionOperation.h */,
+				FC38491015EDC86700BA315F /* AFURLConnectionOperation.m */,
+				FC38491115EDC86700BA315F /* AFXMLRequestOperation.h */,
+				FC38491215EDC86700BA315F /* AFXMLRequestOperation.m */,
+				FC38491315EDC86700BA315F /* UIImageView+AFNetworking.h */,
+				FC38491415EDC86700BA315F /* UIImageView+AFNetworking.m */,
+			);
+			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		FC38491515EDC86700BA315F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FC38491615EDC86700BA315F /* constants.h */,
+				FC38491715EDC86700BA315F /* RssFeeder.h */,
+				FC38491815EDC86700BA315F /* RssFeeder.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FC38491915EDC86700BA315F /* RaptureXML */ = {
+			isa = PBXGroup;
+			children = (
+				FC38491A15EDC86700BA315F /* RXMLElement.h */,
+				FC38491B15EDC86700BA315F /* RXMLElement.m */,
+			);
+			path = RaptureXML;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FC38488315EDC62800BA315F /* MisfitReader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC3848C315EDC62800BA315F /* Build configuration list for PBXNativeTarget "MisfitReader" */;
+			buildPhases = (
+				FC38488015EDC62800BA315F /* Sources */,
+				FC38488115EDC62800BA315F /* Frameworks */,
+				FC38488215EDC62800BA315F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MisfitReader;
+			productName = MisfitReader;
+			productReference = FC38488415EDC62800BA315F /* MisfitReader.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FC3848AF15EDC62800BA315F /* MisfitReaderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC3848C615EDC62800BA315F /* Build configuration list for PBXNativeTarget "MisfitReaderTests" */;
+			buildPhases = (
+				FC3848AB15EDC62800BA315F /* Sources */,
+				FC3848AC15EDC62800BA315F /* Frameworks */,
+				FC3848AD15EDC62800BA315F /* Resources */,
+				FC3848AE15EDC62800BA315F /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FC3848B715EDC62800BA315F /* PBXTargetDependency */,
+			);
+			name = MisfitReaderTests;
+			productName = MisfitReaderTests;
+			productReference = FC3848B015EDC62800BA315F /* MisfitReaderTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FC38487B15EDC62800BA315F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0440;
+			};
+			buildConfigurationList = FC38487E15EDC62800BA315F /* Build configuration list for PBXProject "MisfitReader" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FC38487915EDC62800BA315F;
+			productRefGroup = FC38488515EDC62800BA315F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FC38488315EDC62800BA315F /* MisfitReader */,
+				FC3848AF15EDC62800BA315F /* MisfitReaderTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FC38488215EDC62800BA315F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC38489515EDC62800BA315F /* InfoPlist.strings in Resources */,
+				FC38489E15EDC62800BA315F /* MainStoryboard_iPhone.storyboard in Resources */,
+				FC3848A115EDC62800BA315F /* MainStoryboard_iPad.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FC3848AD15EDC62800BA315F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC3848BD15EDC62800BA315F /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FC3848AE15EDC62800BA315F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FC38488015EDC62800BA315F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC38489715EDC62800BA315F /* main.m in Sources */,
+				FC38489B15EDC62800BA315F /* AppDelegate.m in Sources */,
+				FC3848A415EDC62800BA315F /* MisfitReader.xcdatamodeld in Sources */,
+				FC3848A715EDC62800BA315F /* MasterViewController.m in Sources */,
+				FC3848AA15EDC62800BA315F /* DetailViewController.m in Sources */,
+				FC38491C15EDC86700BA315F /* AFHTTPClient.m in Sources */,
+				FC38491D15EDC86700BA315F /* AFHTTPRequestOperation.m in Sources */,
+				FC38491E15EDC86700BA315F /* AFImageRequestOperation.m in Sources */,
+				FC38491F15EDC86700BA315F /* AFJSONRequestOperation.m in Sources */,
+				FC38492015EDC86700BA315F /* AFJSONUtilities.m in Sources */,
+				FC38492115EDC86700BA315F /* AFNetworkActivityIndicatorManager.m in Sources */,
+				FC38492215EDC86700BA315F /* AFPropertyListRequestOperation.m in Sources */,
+				FC38492315EDC86700BA315F /* AFURLConnectionOperation.m in Sources */,
+				FC38492415EDC86700BA315F /* AFXMLRequestOperation.m in Sources */,
+				FC38492515EDC86700BA315F /* UIImageView+AFNetworking.m in Sources */,
+				FC38492615EDC86700BA315F /* RssFeeder.m in Sources */,
+				FC38492715EDC86700BA315F /* RXMLElement.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FC3848AB15EDC62800BA315F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC3848C015EDC62800BA315F /* MisfitReaderTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FC3848B715EDC62800BA315F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FC38488315EDC62800BA315F /* MisfitReader */;
+			targetProxy = FC3848B615EDC62800BA315F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FC38489315EDC62800BA315F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC38489415EDC62800BA315F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC38489D15EDC62800BA315F /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC3848A015EDC62800BA315F /* en */,
+			);
+			name = MainStoryboard_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		FC3848BB15EDC62800BA315F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC3848BC15EDC62800BA315F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FC3848C115EDC62800BA315F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FC3848C215EDC62800BA315F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FC3848C415EDC62800BA315F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MisfitReader/MisfitReader-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SDK_DIR)\"/usr/include/libxml2/**";
+				INFOPLIST_FILE = "MisfitReader/MisfitReader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		FC3848C515EDC62800BA315F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MisfitReader/MisfitReader-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SDK_DIR)\"/usr/include/libxml2/**";
+				INFOPLIST_FILE = "MisfitReader/MisfitReader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		FC3848C715EDC62800BA315F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MisfitReader.app/MisfitReader";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MisfitReader/MisfitReader-Prefix.pch";
+				INFOPLIST_FILE = "MisfitReaderTests/MisfitReaderTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		FC3848C815EDC62800BA315F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MisfitReader.app/MisfitReader";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MisfitReader/MisfitReader-Prefix.pch";
+				INFOPLIST_FILE = "MisfitReaderTests/MisfitReaderTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FC38487E15EDC62800BA315F /* Build configuration list for PBXProject "MisfitReader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC3848C115EDC62800BA315F /* Debug */,
+				FC3848C215EDC62800BA315F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC3848C315EDC62800BA315F /* Build configuration list for PBXNativeTarget "MisfitReader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC3848C415EDC62800BA315F /* Debug */,
+				FC3848C515EDC62800BA315F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC3848C615EDC62800BA315F /* Build configuration list for PBXNativeTarget "MisfitReaderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC3848C715EDC62800BA315F /* Debug */,
+				FC3848C815EDC62800BA315F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		FC3848A215EDC62800BA315F /* MisfitReader.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FC3848A315EDC62800BA315F /* MisfitReader.xcdatamodel */,
+			);
+			currentVersion = FC3848A315EDC62800BA315F /* MisfitReader.xcdatamodel */;
+			path = MisfitReader.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = FC38487B15EDC62800BA315F /* Project object */;
+}
