@@ -39,6 +39,9 @@
 		FC38492515EDC86700BA315F /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491415EDC86700BA315F /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FC38492615EDC86700BA315F /* RssFeeder.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491815EDC86700BA315F /* RssFeeder.m */; };
 		FC38492715EDC86700BA315F /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491B15EDC86700BA315F /* RXMLElement.m */; };
+		FC384AA315EDEAAA00BA315F /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = FC384AA215EDEAAA00BA315F /* Feed.m */; };
+		FC384AA615EDEAC300BA315F /* Entry.m in Sources */ = {isa = PBXBuildFile; fileRef = FC384AA515EDEAC300BA315F /* Entry.m */; };
+		FC384AA915EDF34D00BA315F /* AddSubscriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC384AA815EDF34D00BA315F /* AddSubscriptionViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +107,12 @@
 		FC38491815EDC86700BA315F /* RssFeeder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssFeeder.m; sourceTree = "<group>"; };
 		FC38491A15EDC86700BA315F /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
 		FC38491B15EDC86700BA315F /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
+		FC384AA115EDEAAA00BA315F /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
+		FC384AA215EDEAAA00BA315F /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
+		FC384AA415EDEAC300BA315F /* Entry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entry.h; sourceTree = "<group>"; };
+		FC384AA515EDEAC300BA315F /* Entry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entry.m; sourceTree = "<group>"; };
+		FC384AA715EDF34D00BA315F /* AddSubscriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSubscriptionViewController.h; sourceTree = "<group>"; };
+		FC384AA815EDF34D00BA315F /* AddSubscriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSubscriptionViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +186,8 @@
 				FC38489A15EDC62800BA315F /* AppDelegate.m */,
 				FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */,
 				FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */,
+				FC384AA715EDF34D00BA315F /* AddSubscriptionViewController.h */,
+				FC384AA815EDF34D00BA315F /* AddSubscriptionViewController.m */,
 				FC3848A515EDC62800BA315F /* MasterViewController.h */,
 				FC3848A615EDC62800BA315F /* MasterViewController.m */,
 				FC3848A815EDC62800BA315F /* DetailViewController.h */,
@@ -248,6 +259,10 @@
 		FC38491515EDC86700BA315F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FC384AA115EDEAAA00BA315F /* Feed.h */,
+				FC384AA215EDEAAA00BA315F /* Feed.m */,
+				FC384AA415EDEAC300BA315F /* Entry.h */,
+				FC384AA515EDEAC300BA315F /* Entry.m */,
 				FC38491615EDC86700BA315F /* constants.h */,
 				FC38491715EDC86700BA315F /* RssFeeder.h */,
 				FC38491815EDC86700BA315F /* RssFeeder.m */,
@@ -388,6 +403,9 @@
 				FC38492515EDC86700BA315F /* UIImageView+AFNetworking.m in Sources */,
 				FC38492615EDC86700BA315F /* RssFeeder.m in Sources */,
 				FC38492715EDC86700BA315F /* RXMLElement.m in Sources */,
+				FC384AA315EDEAAA00BA315F /* Feed.m in Sources */,
+				FC384AA615EDEAC300BA315F /* Entry.m in Sources */,
+				FC384AA915EDF34D00BA315F /* AddSubscriptionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

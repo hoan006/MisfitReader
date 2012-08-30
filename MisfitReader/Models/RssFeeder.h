@@ -10,7 +10,14 @@
 
 @interface RssFeeder : NSObject
 
-+ (void)authenticateEmail:(NSString *)email password:(NSString *)password followup:(void (^)(NSString *authValue))followup;
-+ (void)feedRss:(NSString *)urlString withToken:(NSString *)token;
+@property (weak, nonatomic) NSString *email;
+@property (weak, nonatomic) NSString *password;
+@property (weak, nonatomic) NSString *authValue;
+@property (weak, nonatomic) NSString *token;
++ (RssFeeder *)instance;
+- (void)authenticateEmail:(void (^)(NSString *))followup;
+- (void)requestToken:(void (^)(NSString *, NSString *))followup;
+- (void)feedRss:(int)attempts;
+- (void)subscribe:(int)attempts url:(NSString *)feedURL;
 
 @end

@@ -32,6 +32,8 @@
         MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
     }
+    UINavigationBar *navBar = [UINavigationBar appearance];
+    navBar.barStyle = UIBarStyleBlack;
     return YES;
 }
 							

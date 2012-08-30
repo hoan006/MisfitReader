@@ -15,65 +15,138 @@
 
 @implementation RssFeeder
 
-+ (void)authenticateEmail:(NSString *)email password:(NSString *)password followup:(void (^)(NSString *authValue))followup {
++ (RssFeeder *)instance
+{
+    static RssFeeder* _instance = nil;
+    
+    @synchronized( self ) {
+        if( _instance == nil ) {
+            _instance = [[ RssFeeder alloc ] init ];
+            // should load authValue from Core Data
+            _instance.authValue = @"";
+            _instance.token = @"";
+            _instance.email = @"einherjar006@gmail.com";
+            _instance.password = @"26111995";
+        }
+    }
+    
+    return _instance;
+}
+
+- (void)authenticateEmail:(void (^)(NSString *))followup {
     NSURL *url = [NSURL URLWithString:kGOOGLE_CLIENT_LOGIN];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *data = [NSString stringWithFormat:@"accountType=GOOGLE&Email=%@&Passwd=%@&service=reader", email, password];
+    NSString *data = [NSString stringWithFormat:@"accountType=GOOGLE&Email=%@&Passwd=%@&service=reader", self.email, self.password];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"success: %@", operation.responseString);
+        NSLog(@"### AUTH SUCCESS ###");
         NSString *str = operation.responseString;
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"Auth=(.*)" options:0 error:NULL];
         NSTextCheckingResult *match = [regex firstMatchInString:str options:0 range:NSMakeRange(0, [str length])];
-        NSString *authValue = [str substringWithRange:[match rangeAtIndex:1]];
-        NSLog(@"%@", authValue);
+        NSString *newAuthValue = [str substringWithRange:[match rangeAtIndex:1]];
+        NSLog(@"### AUTH VALUE ###: %@", newAuthValue);
         if (followup) {
-            followup(authValue);
+            followup(newAuthValue);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"error: %@",  operation.responseString);
+        NSLog(@"### AUTH ERROR ###: %@",  operation.responseString);
     }];
     [operation start];
 }
 
-+ (void)feedRss:(NSString *)urlString withToken:(NSString *)token
+- (void)requestToken:(void (^)(NSString *, NSString *))followup
 {
-    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_SUBSCRIPTION_LIST];
+    [self requestToken:followup authValue:self.authValue];
+}
+
+- (void)requestToken:(void (^)(NSString *, NSString *))followup authValue:(NSString *)aAuthValue {
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_TOKEN];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setValue:@"curl/7.24.0 (x86_64-apple-darwin12.0) libcurl/7.24.0 OpenSSL/0.9.8r zlib/1.2.5" forHTTPHeaderField:@"User-Agent"];
-    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", token] forHTTPHeaderField:@"Authorization"];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"success: %@", operation.responseString);
+        NSLog(@"### TOKEN SUCCESS ###: %@", operation.responseString);
+        NSString *newToken = [operation.responseString substringFromIndex:2];
+        if (followup) {
+            followup(aAuthValue, newToken);
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"error: %@",  operation.responseString);
+        NSLog(@"### TOKEN ERROR ###");
+        [self authenticateEmail:^(NSString *newAuthValue){
+            [self requestToken:followup authValue:newAuthValue];
+        }];
     }];
     [operation start];
 }
 
-//+ (void)requestToken:(NSString *)code {
-//    NSURL *url = [NSURL URLWithString:@"https://accounts.google.com/o/oauth2/token"];
-//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-//    [request setHTTPMethod:@"POST"];
-//    NSString *dataString = [NSString stringWithFormat:@"code=%@&client_id=500315435164.apps.googleusercontent.com&client_secret=35vT7BL7Wp5bnuDNBvIBpOiW&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code", code];
-//    NSData *dataEncoded = [dataString dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-//    NSString *dataLength = [NSString stringWithFormat:@"%d",[dataEncoded length]];
-//    [request addValue:dataLength forHTTPHeaderField:@"Content-Length"];
-//    [request setHTTPBody:dataEncoded];
-//    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
-//    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"success: %@", operation.responseString);
-//        NSError *e = nil;
-//        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:[operation.responseString dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES] options:NSJSONReadingMutableContainers error:&e];
-//        NSString *token = [json objectForKey:@"access_token"];
-//        [self feedRss:nil withToken:token];
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"error: %@",  operation.responseString);
-//    }];
-//    [operation start];
-//}
+- (void)feedRss:(int)attempts
+{
+    [self feedRss:attempts authValue:self.authValue];
+}
+
+- (void)feedRss:(int)attempts authValue:(NSString *)aAuthValue
+{
+    if (attempts <= 0) {
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_SUBSCRIPTION_LIST];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### FEED SUCCESS ###: %@", operation.responseString);
+        // update feeder
+        self.authValue = aAuthValue;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### FEED ERROR ###: %@",  operation.responseString);
+        [self authenticateEmail:^(NSString *authValue){
+            self.authValue = authValue;
+            [self feedRss:attempts -1];
+        }];
+    }];
+    [operation start];
+}
+
+- (void)subscribe:(int)attempts url:(NSString *)feedURL
+{
+    [self subscribe:attempts url:feedURL authValue:self.authValue token:self.token];
+}
+
+- (void)subscribe:(int)attempts url:(NSString *)feedURL authValue:(NSString *)aAuthValue token:(NSString *)aToken
+{
+    if (attempts <= 0) {
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_SUBSCRIBE];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+    NSString *data = [NSString stringWithFormat:@"quickadd=%@&T=%@", feedURL, aToken];
+    [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### SUBSCRIBE SUCCESS ###: %@", operation.responseString);
+        // update feeder
+        self.authValue = aAuthValue;
+        self.token = aToken;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### SUBSCRIBE ERROR ###: %@",  operation.responseString);
+        [self requestToken:^(NSString *newAuthValue, NSString *newToken){
+            [self subscribe:attempts - 1 url:feedURL authValue:newAuthValue token:newToken];
+        }];
+    }];
+    [operation start];
+}
+
 @end
