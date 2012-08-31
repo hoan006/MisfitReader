@@ -106,6 +106,7 @@
     [self findFeedURL];
 }
 
+UIActivityIndicatorView *activityIndicator;
 - (void)findFeedURL
 {
     NSURL *url = [NSURL URLWithString:_feedInput.text];
@@ -121,10 +122,22 @@
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@.com", url.absoluteString]];
     }
     NSURL *googleFeedURL = [NSURL URLWithString:[kGOOGLE_FEED_API_SERVICE stringByAppendingString:[url absoluteString]]];
-    NSData *jsonData = [NSData dataWithContentsOfURL:googleFeedURL];
+
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [self.navigationBar.topItem setRightBarButtonItem:barButton];
+    [activityIndicator startAnimating];
+    [self performSelector:@selector(extractFeedFromURL:) withObject:googleFeedURL afterDelay:0.01];
+}
+
+- (void)extractFeedFromURL:(NSURL *)url
+{
+    NSData *jsonData = [NSData dataWithContentsOfURL:url];
     NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
     NSError *e;
     NSDictionary* jsonObjects = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+    [activityIndicator stopAnimating];
+    
     if ([[jsonObjects objectForKey:@"responseStatus"] integerValue] == 200)
     {
         NSString *newFeedURL = [[jsonObjects objectForKey:@"responseData"] objectForKey:@"url"];

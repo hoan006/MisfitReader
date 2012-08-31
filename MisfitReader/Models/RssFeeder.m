@@ -22,11 +22,7 @@
     @synchronized( self ) {
         if( _instance == nil ) {
             _instance = [[ RssFeeder alloc ] init ];
-            // should load authValue from Core Data
-            _instance.authValue = @"";
-            _instance.token = @"";
-            _instance.email = @"einherjar006@gmail.com";
-            _instance.password = @"26111995";
+            [_instance loadFromCoreData];
         }
     }
     
@@ -84,12 +80,12 @@
     [operation start];
 }
 
-- (void)feedRss:(int)attempts
+- (void)listSubscription:(int)attempts
 {
-    [self feedRss:attempts authValue:self.authValue];
+    [self listSubscription:attempts authValue:self.authValue];
 }
 
-- (void)feedRss:(int)attempts authValue:(NSString *)aAuthValue
+- (void)listSubscription:(int)attempts authValue:(NSString *)aAuthValue
 {
     if (attempts <= 0) {
         return;
@@ -104,12 +100,11 @@
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"### FEED SUCCESS ###: %@", operation.responseString);
         // update feeder
-        self.authValue = aAuthValue;
+        [self saveAuthValue:aAuthValue andToken:self.token];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### FEED ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
-            self.authValue = authValue;
-            [self feedRss:attempts -1];
+            [self listSubscription:attempts -1];
         }];
     }];
     [operation start];
@@ -138,8 +133,7 @@
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"### SUBSCRIBE SUCCESS ###: %@", operation.responseString);
         // update feeder
-        self.authValue = aAuthValue;
-        self.token = aToken;
+        [self saveAuthValue:aAuthValue andToken:aToken];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### SUBSCRIBE ERROR ###: %@",  operation.responseString);
         [self requestToken:^(NSString *newAuthValue, NSString *newToken){
@@ -149,8 +143,36 @@
     [operation start];
 }
 
-- (void)test
+- (void)loadFromCoreData
 {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"AccountSetting" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+
+    NSError *e;
+    NSArray *result = [context executeFetchRequest:fetchRequest error:&e];
+    if (result.count > 0)
+    {
+        AccountSetting *account = [result objectAtIndex:0];
+        self.email = account.email;
+        self.password = account.password;
+        self.authValue = account.google_auth;
+        self.token = account.google_token;
+    } else {
+        self.email = @"einherjar006@gmail.com";
+        self.password = @"26111995";
+        self.authValue = self.token = @"";
+    }
+}
+
+- (void)saveAuthValue:(NSString *)aAuthValue andToken:(NSString *)aToken
+{
+    self.authValue = aAuthValue;
+    self.token = aToken;
+
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = [appDelegate managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -167,19 +189,20 @@
 
     NSError *e;
     NSArray *result = [context executeFetchRequest:fetchRequest error:&e];
-    for (AccountSetting* item in result)
+    if (result.count == 0)
     {
-        [context deleteObject:item];
+        AccountSetting *account = [NSEntityDescription insertNewObjectForEntityForName:@"AccountSetting"
+                                                                inManagedObjectContext:context];
+        account.email = self.email;
+        account.password = self.password;
+        account.google_auth = self.authValue;
+        account.google_token = self.token;
+    } else {
+        AccountSetting *account = [result objectAtIndex:0];
+        account.google_auth = self.authValue;
+        account.google_token = self.token;
     }
     [context save:nil];
-
-//    AccountSetting *account = [NSEntityDescription insertNewObjectForEntityForName:@"AccountSetting"
-//                                                            inManagedObjectContext:context];
-//    account.email = @"einherjar006@gmail.com";
-//    account.password = @"26111995";
-//    account.google_auth = @"DQAAALQAAACSo216ejL60f_qQcBP5PUa1mRdV50HHQlhx8JW4ssXVRO3tVA2v1dKQLODk9VipPGww-7ltjKmpkgEt96XWKNqCAYtwJVizrV5-ZUszDQDXWXpQqLBa7hFZly1OPEce6sqQUe4_jA_rL1H0ykJNf0mYrWgJgUEtYwjsHpd1bJMRZx7sp204eYZikOr4TJCQbQnSANlTxBmxKxt2_muqJkZWvdmQfZ5tzNNopUQffL7VziPSuCYmEHgfl6t4ZpJNtQ";
-//    account.google_token = @"MWoeRSFvBlxe_KObCsgKgw";
-//    [context save:nil];
 }
 
 @end
