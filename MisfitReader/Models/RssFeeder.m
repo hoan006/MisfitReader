@@ -7,11 +7,11 @@
 //
 
 #import "RssFeeder.h"
-
 #import "AFHTTPRequestOperation.h"
-
 #import "constants.h"
 #import "RXMLElement.h"
+#import "AppDelegate.h"
+#import "AccountSetting.h"
 
 @implementation RssFeeder
 
@@ -147,6 +147,39 @@
         }];
     }];
     [operation start];
+}
+
+- (void)test
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"AccountSetting" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+
+    // Set the batch size to a suitable number.
+//    [fetchRequest setFetchBatchSize:20];
+
+    // Edit the sort key as appropriate.
+//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"email" ascending:NO];
+//    [fetchRequest setSortDescriptors:@[sortDescriptor]];
+
+    NSError *e;
+    NSArray *result = [context executeFetchRequest:fetchRequest error:&e];
+    for (AccountSetting* item in result)
+    {
+        [context deleteObject:item];
+    }
+    [context save:nil];
+
+//    AccountSetting *account = [NSEntityDescription insertNewObjectForEntityForName:@"AccountSetting"
+//                                                            inManagedObjectContext:context];
+//    account.email = @"einherjar006@gmail.com";
+//    account.password = @"26111995";
+//    account.google_auth = @"DQAAALQAAACSo216ejL60f_qQcBP5PUa1mRdV50HHQlhx8JW4ssXVRO3tVA2v1dKQLODk9VipPGww-7ltjKmpkgEt96XWKNqCAYtwJVizrV5-ZUszDQDXWXpQqLBa7hFZly1OPEce6sqQUe4_jA_rL1H0ykJNf0mYrWgJgUEtYwjsHpd1bJMRZx7sp204eYZikOr4TJCQbQnSANlTxBmxKxt2_muqJkZWvdmQfZ5tzNNopUQffL7VziPSuCYmEHgfl6t4ZpJNtQ";
+//    account.google_token = @"MWoeRSFvBlxe_KObCsgKgw";
+//    [context save:nil];
 }
 
 @end

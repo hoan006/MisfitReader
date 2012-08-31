@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1487" systemVersion="12A269" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AccountSetting" representedClassName="AccountSetting" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="google_auth" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="google_token" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Entry" representedClassName="Entry" syncable="YES">
         <attribute name="published_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
@@ -14,7 +20,8 @@
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Entry" inverseName="feed" inverseEntity="Entry" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Feed" positionX="-144" positionY="135" width="128" height="103"/>
-        <element name="Entry" positionX="63" positionY="171" width="128" height="118"/>
+        <element name="Entry" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Feed" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AccountSetting" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

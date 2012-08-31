@@ -15,7 +15,8 @@
 
 @end
 
-@interface AddSubscriptionViewController : UIViewController<UIWebViewDelegate>
+@interface AddSubscriptionViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (weak, nonatomic) UITextField IBOutlet *feedInput;
 @property (weak, nonatomic) UIButton IBOutlet *addButton;
 @property (weak, nonatomic) NSString *feedURL;

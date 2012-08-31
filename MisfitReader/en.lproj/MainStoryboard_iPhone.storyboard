@@ -125,7 +125,7 @@
                             </navigationBar>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Feed or Site URL..." minimumFontSize="17" clearButtonMode="whileEditing" id="FNw-Of-ufI">
                                 <rect key="frame" x="8" y="51" width="303" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="URL" returnKeyType="go"/>
@@ -135,7 +135,7 @@
                             </textField>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HuF-Lf-D2N">
                                 <rect key="frame" x="8" y="89" width="303" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Add...">
                                     <color key="titleColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
@@ -155,6 +155,7 @@
                     <connections>
                         <outlet property="addButton" destination="HuF-Lf-D2N" id="3wp-ut-ShV"/>
                         <outlet property="feedInput" destination="FNw-Of-ufI" id="mGr-eP-cxl"/>
+                        <outlet property="navigationBar" destination="Owk-z4-0NT" id="MyJ-7o-FuU"/>
                     </connections>
                 </viewController>
             </objects>
@@ -170,6 +171,7 @@
                 <relationship kind="action" name="feedInputDidEnd:"/>
                 <relationship kind="outlet" name="addButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="feedInput" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
             </relationships>
         </class>
         <class className="DetailViewController" superclassName="UIViewController">

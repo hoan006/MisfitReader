@@ -19,5 +19,5 @@
 - (void)requestToken:(void (^)(NSString *, NSString *))followup;
 - (void)feedRss:(int)attempts;
 - (void)subscribe:(int)attempts url:(NSString *)feedURL;
-
+- (void)test;
 @end
