@@ -11,6 +11,8 @@
 #import "DetailViewController.h"
 
 #import "Feed.h"
+#import "RXMLElement.h"
+#import "MasterCell.h"
 
 @interface MasterViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -36,6 +38,7 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"ᐸ" style:UIBarButtonItemStyleBordered target:nil action:nil];
     self.navigationController.toolbarHidden = NO;
     [RssFeeder instance].delegate = self;
+
     [self updateSubscriptionList:nil];
 }
 
@@ -58,18 +61,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[self.fetchedResultsController sections] count];
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects];
+    return [self.fetchedResultsController fetchedObjects].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MasterCell"];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
@@ -237,39 +239,96 @@
 
 - (IBAction)updateSubscriptionList:(id)sender
 {
-    [[RssFeeder instance] listSubscription:3];
+    //[[RssFeeder instance] listSubscription:3];
+
+    NSArray *feeds = self.fetchedResultsController.fetchedObjects;
+    if (feeds.count > 0) {
+        feedingIndex = 0;
+        [self listEntriesAtIndex:feedingIndex];
+    }
 }
 
 - (void)listSubscriptionSuccess:(NSArray *)result
 {
     NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST SUCCESS");
-    // sync with local storage - add/rename feeds
-    for (Feed *feed in result) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
-        NSArray *filteredArray = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:predicate];
-        if ([filteredArray count] == 0) {
-            [self.managedObjectContext insertObject:feed];
-        } else {
-            ((Feed *)[filteredArray objectAtIndex:0]).title = feed.title;
-        }
-    }
+    NSArray *feeds = self.fetchedResultsController.fetchedObjects;
 
-    // sync with local storage - remove feeds
-    for (Feed *feed in self.fetchedResultsController.fetchedObjects) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
-        NSArray *filteredArray = [result filteredArrayUsingPredicate:predicate];
-        if ([filteredArray count] == 0) {
-            [self.managedObjectContext deleteObject:feed];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // sync with local storage - add/rename feeds
+        for (Feed *feed in result) {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+            NSArray *filteredArray = [feeds filteredArrayUsingPredicate:predicate];
+            if ([filteredArray count] == 0) {
+                [self.managedObjectContext insertObject:feed];
+            } else {
+                ((Feed *)[filteredArray objectAtIndex:0]).title = feed.title;
+            }
         }
-    }
-    [self.managedObjectContext save:nil];
-    [self.tableView reloadData];
+
+        // sync with local storage - remove feeds
+        for (Feed *feed in feeds) {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+            NSArray *filteredArray = [result filteredArrayUsingPredicate:predicate];
+            if ([filteredArray count] == 0) {
+                [self.managedObjectContext deleteObject:feed];
+            }
+        }
+        [self.managedObjectContext save:nil];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+
+        // fetch entries for each feed
+        if (feeds.count > 0) {
+            feedingIndex = 0;
+            [self listEntriesAtIndex:feedingIndex];
+        }
+    });
 }
 
 - (void)listSubscriptionFailure:(NSError *)error
 {
     NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST FAILURE");
     [self showUnknownError];
+}
+
+
+int feedingIndex;
+
+- (void)listEntriesAtIndex:(int)index
+{
+    NSArray *feeds = self.fetchedResultsController.fetchedObjects;
+    if (index < feeds.count) {
+        Feed *feed = [feeds objectAtIndex:index];
+        [[RssFeeder instance] listEntries:3 feed:feed];
+    }
+}
+
+- (void)listEntriesSuccess:(Feed *)feed xml:(NSString *)xmlDoc
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"*** MasterView: LIST ENTRIES SUCCESS - %@", feed.title);
+        RXMLElement *rootXML = [RXMLElement elementFromXMLString:xmlDoc encoding:NSUTF8StringEncoding];
+        int entryCount = [rootXML children:@"entry"].count;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateEntriesCount:entryCount];
+            [self listEntriesAtIndex:++feedingIndex];
+        });
+    });
+}
+
+- (void)updateEntriesCount:(int)count
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:feedingIndex inSection:0];
+    MasterCell *cell = (MasterCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", count];
+}
+
+- (void)listEntriesFailure:(Feed *)feed error:(NSError *)error
+{
+    NSLog(@"*** MasterView: LIST ENTRIES FAILURE - %@", feed.title);
+    [self listEntriesAtIndex:++feedingIndex];
 }
 
 - (void)showUnknownError

@@ -12,6 +12,7 @@
 #import "RssParser.h"
 #import "AppDelegate.h"
 #import "AccountSetting.h"
+#import "Feed.h"
 
 @implementation RssFeeder
 
@@ -102,13 +103,17 @@
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"### FEED SUCCESS ###: %@", operation.responseString);
-        NSArray *result = [RssParser parseFeeds:operation.responseString];
-        if ([self.delegate respondsToSelector:@selector(listSubscriptionSuccess:)]) {
-            [self.delegate listSubscriptionSuccess:result];
-        }
-        // update feeder
-        [self saveAuthValue:aAuthValue andToken:self.token];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"### FEED SUCCESS ###: %@", operation.responseString);
+            NSArray *result = [RssParser parseFeeds:operation.responseString];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self.delegate respondsToSelector:@selector(listSubscriptionSuccess:)]) {
+                    [self.delegate listSubscriptionSuccess:result];
+                }
+                // update feeder
+                [self saveAuthValue:aAuthValue andToken:self.token];
+            });
+        });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### FEED ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
@@ -158,6 +163,43 @@
     [operation start];
 }
 
+- (void)listEntries:(int)attempts feed:(Feed *)feed
+{
+    [self listEntries:attempts feed:feed authValue:self.authValue];
+}
+
+- (void)listEntries:(int)attempts feed:(Feed *)feed authValue:(NSString *)aAuthValue
+{
+    if (attempts <= 0) {
+        //TODO: Detect useful error
+        if ([self.delegate respondsToSelector:@selector(listEntriesFailure:error:)]) {
+            [self.delegate listEntriesFailure:feed error:nil];
+        }
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:[kGOOGLE_READER_NEW_FEEDS stringByAppendingString:feed.rss_url]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### LIST ENTRIES SUCCESS ###");
+        if ([self.delegate respondsToSelector:@selector(listEntriesSuccess:xml:)]) {
+            [self.delegate listEntriesSuccess:feed xml:operation.responseString];
+        }
+        // update feeder
+        [self saveAuthValue:aAuthValue andToken:self.token];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### LIST ENTRIES ERROR ###: %@",  operation.responseString);
+        [self authenticateEmail:^(NSString *authValue){
+            [self listEntries:attempts -1 feed:feed authValue:authValue];
+        }];
+    }];
+    [operation start];
+}
+
 - (void)loadFromCoreData
 {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -194,13 +236,6 @@
     // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"AccountSetting" inManagedObjectContext:context];
     [fetchRequest setEntity:entity];
-
-    // Set the batch size to a suitable number.
-//    [fetchRequest setFetchBatchSize:20];
-
-    // Edit the sort key as appropriate.
-//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"email" ascending:NO];
-//    [fetchRequest setSortDescriptors:@[sortDescriptor]];
 
     NSError *e;
     NSArray *result = [context executeFetchRequest:fetchRequest error:&e];

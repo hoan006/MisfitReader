@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class Feed;
 
 @protocol RssFeederDelegate <NSObject>
 
@@ -15,6 +16,8 @@
 - (void)subscribeFailure:(NSError *)error;
 - (void)listSubscriptionSuccess:(NSArray *)result;
 - (void)listSubscriptionFailure:(NSError *)error;
+- (void)listEntriesSuccess:(Feed *)feed xml:(NSString *)xmlDoc;
+- (void)listEntriesFailure:(Feed *)feed error:(NSError *)error;
 
 @end
 
@@ -31,4 +34,5 @@
 - (void)requestToken:(void (^)(NSString *, NSString *))followup;
 - (void)listSubscription:(int)attempts;
 - (void)subscribe:(int)attempts url:(NSString *)feedURL;
+- (void)listEntries:(int)attempts feed:(Feed *)feed;
 @end

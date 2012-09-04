@@ -70,6 +70,8 @@
 		FC46018E15F057BD00FB5DA6 /* alert-window@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC46017815F057BD00FB5DA6 /* alert-window@2x.png */; };
 		FC7A20A315F0A70600F5D23B /* RssParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7A20A215F0A70600F5D23B /* RssParser.m */; };
 		FCA28ADC15F4A379003F20BB /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28ADB15F4A379003F20BB /* Feed.m */; };
+		FCA28AE215F5B305003F20BB /* MasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE115F5B305003F20BB /* MasterCell.m */; };
+		FCA28AE615F5D580003F20BB /* DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE515F5D580003F20BB /* DetailCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,6 +178,11 @@
 		FC7A20A215F0A70600F5D23B /* RssParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssParser.m; sourceTree = "<group>"; };
 		FCA28ADA15F4A379003F20BB /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
 		FCA28ADB15F4A379003F20BB /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
+		FCA28AE015F5B305003F20BB /* MasterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterCell.h; sourceTree = "<group>"; };
+		FCA28AE115F5B305003F20BB /* MasterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterCell.m; sourceTree = "<group>"; };
+		FCA28AE315F5B730003F20BB /* UIApplication_AppDimensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIApplication_AppDimensions.h; sourceTree = "<group>"; };
+		FCA28AE415F5D580003F20BB /* DetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailCell.h; sourceTree = "<group>"; };
+		FCA28AE515F5D580003F20BB /* DetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,12 +255,17 @@
 				FC38491915EDC86700BA315F /* RaptureXML */,
 				FC38489915EDC62800BA315F /* AppDelegate.h */,
 				FC38489A15EDC62800BA315F /* AppDelegate.m */,
+				FCA28AE315F5B730003F20BB /* UIApplication_AppDimensions.h */,
 				FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */,
 				FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */,
 				FC384AA715EDF34D00BA315F /* AddSubscriptionViewController.h */,
 				FC384AA815EDF34D00BA315F /* AddSubscriptionViewController.m */,
+				FCA28AE015F5B305003F20BB /* MasterCell.h */,
+				FCA28AE115F5B305003F20BB /* MasterCell.m */,
 				FC3848A515EDC62800BA315F /* MasterViewController.h */,
 				FC3848A615EDC62800BA315F /* MasterViewController.m */,
+				FCA28AE415F5D580003F20BB /* DetailCell.h */,
+				FCA28AE515F5D580003F20BB /* DetailCell.m */,
 				FC3848A815EDC62800BA315F /* DetailViewController.h */,
 				FC3848A915EDC62800BA315F /* DetailViewController.m */,
 				FC3848A215EDC62800BA315F /* MisfitReader.xcdatamodeld */,
@@ -556,6 +568,8 @@
 				FC46015E15F0559D00FB5DA6 /* BlockTextPromptAlertView.m in Sources */,
 				FC7A20A315F0A70600F5D23B /* RssParser.m in Sources */,
 				FCA28ADC15F4A379003F20BB /* Feed.m in Sources */,
+				FCA28AE215F5B305003F20BB /* MasterCell.m in Sources */,
+				FCA28AE615F5D580003F20BB /* DetailCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

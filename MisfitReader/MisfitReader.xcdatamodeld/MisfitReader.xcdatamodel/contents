@@ -18,11 +18,12 @@
         <attribute name="html_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rss_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Entry" inverseName="feed" inverseEntity="Entry" syncable="YES"/>
     </entity>
     <elements>
         <element name="AccountSetting" positionX="-117" positionY="-9" width="128" height="103"/>
         <element name="Entry" positionX="-81" positionY="-198" width="128" height="118"/>
-        <element name="Feed" positionX="-306" positionY="-126" width="128" height="118"/>
+        <element name="Feed" positionX="-306" positionY="-126" width="128" height="133"/>
     </elements>
 </model>
