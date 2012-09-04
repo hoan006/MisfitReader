@@ -8,12 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol RssFeederDelegate <NSObject>
+
+@optional
+- (void)subscribeSuccess;
+- (void)subscribeFailure:(NSError *)error;
+- (void)listSubscriptionSuccess:(NSArray *)result;
+- (void)listSubscriptionFailure:(NSError *)error;
+
+@end
+
 @interface RssFeeder : NSObject
 
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
 @property (strong, nonatomic) NSString *authValue;
 @property (strong, nonatomic) NSString *token;
+@property (weak, nonatomic) id<RssFeederDelegate> delegate;
+
 + (RssFeeder *)instance;
 - (void)authenticateEmail:(void (^)(NSString *))followup;
 - (void)requestToken:(void (^)(NSString *, NSString *))followup;

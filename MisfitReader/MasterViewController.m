@@ -10,7 +10,7 @@
 
 #import "DetailViewController.h"
 
-#import "RssFeeder.h"
+#import "Feed.h"
 
 @interface MasterViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -31,9 +31,12 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.navigationItem.title = [RssFeeder instance].email;
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"ᐸ" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    self.navigationController.toolbarHidden = NO;
+    [RssFeeder instance].delegate = self;
+    [self updateSubscriptionList:nil];
 }
 
 - (void)viewDidUnload
@@ -48,29 +51,6 @@
         return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
     } else {
         return YES;
-    }
-}
-
-- (void)insertNewObject:(id)sender
-{
-    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-    NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
-    NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
-    
-    // If appropriate, configure the new managed object.
-    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    [newManagedObject setValue:[NSDateFormatter localizedStringFromDate:[NSDate date]
-                                                               dateStyle:NSDateFormatterShortStyle
-                                                               timeStyle:NSDateFormatterFullStyle]
-                        forKey:@"title"];
-    
-    // Save the context.
-    NSError *error = nil;
-    if (![context save:&error]) {
-         // Replace this implementation with code to handle the error appropriately.
-         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
     }
 }
 
@@ -97,23 +77,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
-        
-        NSError *error = nil;
-        if (![context save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }   
+    return NO;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -154,12 +118,12 @@
     // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Feed" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
-    
+
     // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
+    // [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -244,7 +208,9 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.imageView.image = [UIImage imageWithData:[object valueForKey:@"favicon"]];
     cell.textLabel.text = [[object valueForKey:@"title"] description];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [(NSSet *)[object valueForKey:@"entries"] count]];
 }
 
 - (IBAction)openSubscriptionView:(id)sender
@@ -256,4 +222,60 @@
 {
     [[RssFeeder instance] subscribe:3 url:feedURL];
 }
+
+- (void)subscribeSuccess
+{
+    NSLog(@"*** MasterView: SUBSCRIBE SUCCESS");
+    [self updateSubscriptionList:nil];
+}
+
+- (void)subscribeFailure:(NSError *)error
+{
+    NSLog(@"*** MasterVIew: SUSCRIBE FAILURE");
+    [self showUnknownError];
+}
+
+- (IBAction)updateSubscriptionList:(id)sender
+{
+    [[RssFeeder instance] listSubscription:3];
+}
+
+- (void)listSubscriptionSuccess:(NSArray *)result
+{
+    NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST SUCCESS");
+    // sync with local storage - add/rename feeds
+    for (Feed *feed in result) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+        NSArray *filteredArray = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:predicate];
+        if ([filteredArray count] == 0) {
+            [self.managedObjectContext insertObject:feed];
+        } else {
+            ((Feed *)[filteredArray objectAtIndex:0]).title = feed.title;
+        }
+    }
+
+    // sync with local storage - remove feeds
+    for (Feed *feed in self.fetchedResultsController.fetchedObjects) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+        NSArray *filteredArray = [result filteredArrayUsingPredicate:predicate];
+        if ([filteredArray count] == 0) {
+            [self.managedObjectContext deleteObject:feed];
+        }
+    }
+    [self.managedObjectContext save:nil];
+    [self.tableView reloadData];
+}
+
+- (void)listSubscriptionFailure:(NSError *)error
+{
+    NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST FAILURE");
+    [self showUnknownError];
+}
+
+- (void)showUnknownError
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Something's wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
 @end

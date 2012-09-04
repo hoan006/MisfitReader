@@ -194,7 +194,9 @@ BlockAlertView *alert;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.delegate shouldAddNewFeed:self.feedURL];
+    if (self.feedURL != nil) {
+        [self.delegate shouldAddNewFeed:self.feedURL];
+    }
 }
 
 @end

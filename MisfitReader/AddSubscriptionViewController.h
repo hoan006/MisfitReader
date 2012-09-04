@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (weak, nonatomic) UITextField IBOutlet *feedInput;
 @property (weak, nonatomic) UIButton IBOutlet *addButton;
-@property (weak, nonatomic) NSString *feedURL;
+@property (strong, nonatomic) NSString *feedURL;
 
 @property (nonatomic, weak) id<AddSubscriptionDelegate> delegate;
 

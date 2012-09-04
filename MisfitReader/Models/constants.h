@@ -10,7 +10,6 @@
 #define kGOOGLE_CLIENT_LOGIN @"https://www.google.com/accounts/ClientLogin"
 #define kGOOGLE_READER_NEW_FEEDS @"http://www.google.com/reader/atom/"
 #define kGOOGLE_READER_SUBSCRIPTION_LIST @"http://www.google.com/reader/api/0/subscription/list"
-#define kGOOGLE_FAVICON_API_SERVICE @"http://www.google.com/s2/favicons?domain="
 #define kGOOGLE_FEED_API_SERVICE @"http://ajax.googleapis.com/ajax/services/feed/lookup?v=1.0&q="
 #define kMAXIMUM_ITEMS_PER_FEED 100
 #define kGOOGLE_READER_TOKEN @"http://www.google.com/reader/api/0/token"

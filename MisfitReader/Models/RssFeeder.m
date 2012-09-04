@@ -9,7 +9,7 @@
 #import "RssFeeder.h"
 #import "AFHTTPRequestOperation.h"
 #import "constants.h"
-#import "RXMLElement.h"
+#import "RssParser.h"
 #import "AppDelegate.h"
 #import "AccountSetting.h"
 
@@ -17,7 +17,7 @@
 
 + (RssFeeder *)instance
 {
-    static RssFeeder* _instance = nil;
+    static RssFeeder *_instance = nil;
     
     @synchronized( self ) {
         if( _instance == nil ) {
@@ -88,6 +88,10 @@
 - (void)listSubscription:(int)attempts authValue:(NSString *)aAuthValue
 {
     if (attempts <= 0) {
+        //TODO: detect useful error
+        if ([self.delegate respondsToSelector:@selector(listSubscriptionFailure:)]) {
+            [self.delegate listSubscriptionFailure:nil];
+        }
         return;
     }
     NSURL *url = [NSURL URLWithString:kGOOGLE_READER_SUBSCRIPTION_LIST];
@@ -99,12 +103,16 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"### FEED SUCCESS ###: %@", operation.responseString);
+        NSArray *result = [RssParser parseFeeds:operation.responseString];
+        if ([self.delegate respondsToSelector:@selector(listSubscriptionSuccess:)]) {
+            [self.delegate listSubscriptionSuccess:result];
+        }
         // update feeder
         [self saveAuthValue:aAuthValue andToken:self.token];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### FEED ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
-            [self listSubscription:attempts -1];
+            [self listSubscription:attempts -1 authValue:authValue];
         }];
     }];
     [operation start];
@@ -118,6 +126,10 @@
 - (void)subscribe:(int)attempts url:(NSString *)feedURL authValue:(NSString *)aAuthValue token:(NSString *)aToken
 {
     if (attempts <= 0) {
+        //TODO: Detect useful error
+        if ([self.delegate respondsToSelector:@selector(subscribeFailure:)]) {
+            [self.delegate subscribeFailure:nil];
+        }
         return;
     }
     NSURL *url = [NSURL URLWithString:kGOOGLE_READER_SUBSCRIBE];
@@ -132,6 +144,9 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"### SUBSCRIBE SUCCESS ###: %@", operation.responseString);
+        if ([self.delegate respondsToSelector:@selector(subscribeSuccess)]) {
+            [self.delegate subscribeSuccess];
+        }
         // update feeder
         [self saveAuthValue:aAuthValue andToken:aToken];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

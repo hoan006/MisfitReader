@@ -34,6 +34,8 @@
     }
     UINavigationBar *navBar = [UINavigationBar appearance];
     navBar.barStyle = UIBarStyleBlack;
+    UINavigationBar *toolBar = [UIToolbar appearance];
+    toolBar.barStyle = UIBarStyleBlackTranslucent;
     return YES;
 }
 							

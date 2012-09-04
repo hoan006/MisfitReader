@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "AddSubscriptionViewController.h"
+#import "RssFeeder.h"
 
 @class DetailViewController;
 
 #import <CoreData/CoreData.h>
 
-@interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate, AddSubscriptionDelegate>
+@interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate, AddSubscriptionDelegate, RssFeederDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
@@ -21,5 +22,6 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (IBAction)openSubscriptionView:(id)sender;
+- (IBAction)updateSubscriptionList:(id)sender;
 
 @end

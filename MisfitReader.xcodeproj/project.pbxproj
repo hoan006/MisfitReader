@@ -39,7 +39,6 @@
 		FC38492515EDC86700BA315F /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491415EDC86700BA315F /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FC38492615EDC86700BA315F /* RssFeeder.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491815EDC86700BA315F /* RssFeeder.m */; };
 		FC38492715EDC86700BA315F /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38491B15EDC86700BA315F /* RXMLElement.m */; };
-		FC384AA315EDEAAA00BA315F /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = FC384AA215EDEAAA00BA315F /* Feed.m */; };
 		FC384AA615EDEAC300BA315F /* Entry.m in Sources */ = {isa = PBXBuildFile; fileRef = FC384AA515EDEAC300BA315F /* Entry.m */; };
 		FC384AA915EDF34D00BA315F /* AddSubscriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC384AA815EDF34D00BA315F /* AddSubscriptionViewController.m */; };
 		FC46014C15EF801200FB5DA6 /* AccountSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = FC46014B15EF801200FB5DA6 /* AccountSetting.m */; };
@@ -69,6 +68,8 @@
 		FC46018C15F057BD00FB5DA6 /* alert-red-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC46017615F057BD00FB5DA6 /* alert-red-button@2x.png */; };
 		FC46018D15F057BD00FB5DA6 /* alert-window.png in Resources */ = {isa = PBXBuildFile; fileRef = FC46017715F057BD00FB5DA6 /* alert-window.png */; };
 		FC46018E15F057BD00FB5DA6 /* alert-window@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC46017815F057BD00FB5DA6 /* alert-window@2x.png */; };
+		FC7A20A315F0A70600F5D23B /* RssParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7A20A215F0A70600F5D23B /* RssParser.m */; };
+		FCA28ADC15F4A379003F20BB /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28ADB15F4A379003F20BB /* Feed.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,8 +135,6 @@
 		FC38491815EDC86700BA315F /* RssFeeder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssFeeder.m; sourceTree = "<group>"; };
 		FC38491A15EDC86700BA315F /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
 		FC38491B15EDC86700BA315F /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
-		FC384AA115EDEAAA00BA315F /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
-		FC384AA215EDEAAA00BA315F /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
 		FC384AA415EDEAC300BA315F /* Entry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entry.h; sourceTree = "<group>"; };
 		FC384AA515EDEAC300BA315F /* Entry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entry.m; sourceTree = "<group>"; };
 		FC384AA715EDF34D00BA315F /* AddSubscriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSubscriptionViewController.h; sourceTree = "<group>"; };
@@ -173,6 +172,10 @@
 		FC46017615F057BD00FB5DA6 /* alert-red-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-red-button@2x.png"; sourceTree = "<group>"; };
 		FC46017715F057BD00FB5DA6 /* alert-window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-window.png"; sourceTree = "<group>"; };
 		FC46017815F057BD00FB5DA6 /* alert-window@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-window@2x.png"; sourceTree = "<group>"; };
+		FC7A20A115F0A70600F5D23B /* RssParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RssParser.h; sourceTree = "<group>"; };
+		FC7A20A215F0A70600F5D23B /* RssParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssParser.m; sourceTree = "<group>"; };
+		FCA28ADA15F4A379003F20BB /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
+		FCA28ADB15F4A379003F20BB /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -322,15 +325,17 @@
 		FC38491515EDC86700BA315F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FCA28ADA15F4A379003F20BB /* Feed.h */,
+				FCA28ADB15F4A379003F20BB /* Feed.m */,
 				FC46014A15EF801200FB5DA6 /* AccountSetting.h */,
 				FC46014B15EF801200FB5DA6 /* AccountSetting.m */,
-				FC384AA115EDEAAA00BA315F /* Feed.h */,
-				FC384AA215EDEAAA00BA315F /* Feed.m */,
 				FC384AA415EDEAC300BA315F /* Entry.h */,
 				FC384AA515EDEAC300BA315F /* Entry.m */,
 				FC38491615EDC86700BA315F /* constants.h */,
 				FC38491715EDC86700BA315F /* RssFeeder.h */,
 				FC38491815EDC86700BA315F /* RssFeeder.m */,
+				FC7A20A115F0A70600F5D23B /* RssParser.h */,
+				FC7A20A215F0A70600F5D23B /* RssParser.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -542,7 +547,6 @@
 				FC38492515EDC86700BA315F /* UIImageView+AFNetworking.m in Sources */,
 				FC38492615EDC86700BA315F /* RssFeeder.m in Sources */,
 				FC38492715EDC86700BA315F /* RXMLElement.m in Sources */,
-				FC384AA315EDEAAA00BA315F /* Feed.m in Sources */,
 				FC384AA615EDEAC300BA315F /* Entry.m in Sources */,
 				FC384AA915EDF34D00BA315F /* AddSubscriptionViewController.m in Sources */,
 				FC46014C15EF801200FB5DA6 /* AccountSetting.m in Sources */,
@@ -550,6 +554,8 @@
 				FC46015C15F0559D00FB5DA6 /* BlockAlertView.m in Sources */,
 				FC46015D15F0559D00FB5DA6 /* BlockBackground.m in Sources */,
 				FC46015E15F0559D00FB5DA6 /* BlockTextPromptAlertView.m in Sources */,
+				FC7A20A315F0A70600F5D23B /* RssParser.m in Sources */,
+				FCA28ADC15F4A379003F20BB /* Feed.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
