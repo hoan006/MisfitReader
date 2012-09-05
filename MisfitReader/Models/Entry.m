@@ -13,6 +13,7 @@
 @implementation Entry
 
 @dynamic title;
+@dynamic link;
 @dynamic published_at;
 @dynamic updated_at;
 @dynamic summary;

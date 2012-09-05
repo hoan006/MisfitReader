@@ -16,7 +16,7 @@
 - (void)subscribeFailure:(NSError *)error;
 - (void)listSubscriptionSuccess:(NSArray *)result;
 - (void)listSubscriptionFailure:(NSError *)error;
-- (void)listEntriesSuccess:(Feed *)feed xml:(NSString *)xmlDoc;
+- (void)listEntriesSuccess:(Feed *)feed result:(NSArray *)entries;
 - (void)listEntriesFailure:(Feed *)feed error:(NSError *)error;
 
 @end

@@ -14,6 +14,7 @@
 @interface Entry : NSManagedObject
 
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSString * link;
 @property (nonatomic, retain) NSDate * published_at;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * summary;

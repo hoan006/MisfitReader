@@ -183,12 +183,26 @@
     [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
 
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"### LIST ENTRIES SUCCESS ###");
-        if ([self.delegate respondsToSelector:@selector(listEntriesSuccess:xml:)]) {
-            [self.delegate listEntriesSuccess:feed xml:operation.responseString];
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+            //detect response is a XML or HTML
+            if ([[operation.responseString substringToIndex:30] rangeOfString:@"<html"].location != NSNotFound)
+            {
+                NSLog(@"### LIST ENTRIES REDIRECT ###");
+                [self authenticateEmail:^(NSString *authValue){
+                    [self listEntries:attempts -1 feed:feed authValue:authValue];
+                }];
+            } else {
+                NSLog(@"### LIST ENTRIES SUCCESS ###");
+                NSArray *entries = [RssParser parseEntries:operation.responseString];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([self.delegate respondsToSelector:@selector(listEntriesSuccess:result:)]) {
+                        [self.delegate listEntriesSuccess:feed result:entries];
+                    }
+                });
+            }
+        });
         // update feeder
         [self saveAuthValue:aAuthValue andToken:self.token];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -253,6 +267,23 @@
         account.google_token = self.token;
     }
     [context save:nil];
+}
+
+- (NSDate *)lastUpdate
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    id date = [prefs stringForKey:@"LastUpdate"];
+    if (date == nil || ![date isKindOfClass:[NSDate class]])
+    {
+        return [[NSDate date] dateByAddingTimeInterval: -86400.0];
+    }
+    return date;
+}
+
+- (void)setLastUpdate:(NSDate *)date
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:date forKey:@"LastUpdate"];
 }
 
 @end

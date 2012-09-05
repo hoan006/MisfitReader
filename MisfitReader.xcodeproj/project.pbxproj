@@ -72,6 +72,7 @@
 		FCA28ADC15F4A379003F20BB /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28ADB15F4A379003F20BB /* Feed.m */; };
 		FCA28AE215F5B305003F20BB /* MasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE115F5B305003F20BB /* MasterCell.m */; };
 		FCA28AE615F5D580003F20BB /* DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE515F5D580003F20BB /* DetailCell.m */; };
+		FCA28AED15F70180003F20BB /* DetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCA28AEC15F70180003F20BB /* DetailCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,6 +184,8 @@
 		FCA28AE315F5B730003F20BB /* UIApplication_AppDimensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIApplication_AppDimensions.h; sourceTree = "<group>"; };
 		FCA28AE415F5D580003F20BB /* DetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailCell.h; sourceTree = "<group>"; };
 		FCA28AE515F5D580003F20BB /* DetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailCell.m; sourceTree = "<group>"; };
+		FCA28AE715F6F138003F20BB /* NSString_StrippingHTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSString_StrippingHTML.h; sourceTree = "<group>"; };
+		FCA28AEC15F70180003F20BB /* DetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,9 +269,11 @@
 				FC3848A615EDC62800BA315F /* MasterViewController.m */,
 				FCA28AE415F5D580003F20BB /* DetailCell.h */,
 				FCA28AE515F5D580003F20BB /* DetailCell.m */,
+				FCA28AEC15F70180003F20BB /* DetailCell.xib */,
 				FC3848A815EDC62800BA315F /* DetailViewController.h */,
 				FC3848A915EDC62800BA315F /* DetailViewController.m */,
 				FC3848A215EDC62800BA315F /* MisfitReader.xcdatamodeld */,
+				FCA28AE715F6F138003F20BB /* NSString_StrippingHTML.h */,
 				FC38489115EDC62800BA315F /* Supporting Files */,
 			);
 			path = MisfitReader;
@@ -508,6 +513,7 @@
 				FC46018C15F057BD00FB5DA6 /* alert-red-button@2x.png in Resources */,
 				FC46018D15F057BD00FB5DA6 /* alert-window.png in Resources */,
 				FC46018E15F057BD00FB5DA6 /* alert-window@2x.png in Resources */,
+				FCA28AED15F70180003F20BB /* DetailCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

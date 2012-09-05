@@ -10,4 +10,10 @@
 
 @interface DetailCell : UITableViewCell
 
+@property IBOutlet UIImageView *feedIcon;
+@property IBOutlet UILabel *feedTitle;
+@property IBOutlet UILabel *entryTime;
+@property IBOutlet UILabel *entryTitle;
+@property IBOutlet UILabel *entrySummary;
+
 @end

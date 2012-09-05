@@ -7,10 +7,10 @@
 //
 
 #import "MasterViewController.h"
-
 #import "DetailViewController.h"
 
 #import "Feed.h"
+#import "Entry.h"
 #import "RXMLElement.h"
 #import "MasterCell.h"
 
@@ -33,7 +33,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.navigationItem.title = [RssFeeder instance].email;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"ᐸ" style:UIBarButtonItemStyleBordered target:nil action:nil];
     self.navigationController.toolbarHidden = NO;
@@ -91,8 +90,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        self.detailViewController.detailItem = object;
+        Feed *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        self.detailViewController.filteredFeed = object;
     }
 }
 
@@ -100,8 +99,10 @@
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setDetailItem:object];
+        Feed *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        DetailViewController *detailViewController = [segue destinationViewController];
+        detailViewController.filteredFeed = object;
+        detailViewController.managedObjectContext = self.managedObjectContext;
     }
     else if ([[segue identifier] isEqualToString:@"openSubscription"]) {
         ((AddSubscriptionViewController *)[segue destinationViewController]).delegate = self;
@@ -199,13 +200,13 @@
 
 /*
 // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
- 
- - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    // In the simplest, most efficient, case, reload the table view.
-    [self.tableView reloadData];
-}
- */
+*/
+
+// - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+//{
+//    // In the simplest, most efficient, case, reload the table view.
+//    [self.tableView reloadData];
+//}
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
@@ -239,13 +240,7 @@
 
 - (IBAction)updateSubscriptionList:(id)sender
 {
-    //[[RssFeeder instance] listSubscription:3];
-
-    NSArray *feeds = self.fetchedResultsController.fetchedObjects;
-    if (feeds.count > 0) {
-        feedingIndex = 0;
-        [self listEntriesAtIndex:feedingIndex];
-    }
+    [[RssFeeder instance] listSubscription:3];
 }
 
 - (void)listSubscriptionSuccess:(NSArray *)result
@@ -253,38 +248,37 @@
     NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST SUCCESS");
     NSArray *feeds = self.fetchedResultsController.fetchedObjects;
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // sync with local storage - add/rename feeds
-        for (Feed *feed in result) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
-            NSArray *filteredArray = [feeds filteredArrayUsingPredicate:predicate];
-            if ([filteredArray count] == 0) {
-                [self.managedObjectContext insertObject:feed];
-            } else {
-                ((Feed *)[filteredArray objectAtIndex:0]).title = feed.title;
-            }
+    // sync with local storage - add/rename feeds
+    for (Feed *feed in result) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+        NSArray *filteredArray = [feeds filteredArrayUsingPredicate:predicate];
+        if ([filteredArray count] == 0) {
+            [self.managedObjectContext insertObject:feed];
+        } else {
+            ((Feed *)[filteredArray objectAtIndex:0]).title = feed.title;
         }
+    }
 
-        // sync with local storage - remove feeds
-        for (Feed *feed in feeds) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
-            NSArray *filteredArray = [result filteredArrayUsingPredicate:predicate];
-            if ([filteredArray count] == 0) {
-                [self.managedObjectContext deleteObject:feed];
-            }
+    // sync with local storage - remove feeds
+    for (Feed *feed in feeds) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+        NSArray *filteredArray = [result filteredArrayUsingPredicate:predicate];
+        if ([filteredArray count] == 0) {
+            [self.managedObjectContext deleteObject:feed];
         }
-        [self.managedObjectContext save:nil];
+    }
+    
+    NSError *e;
+    [self.managedObjectContext save:&e];
+    if (e) NSLog(@"DATA CORE ERROR: %@", e);
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
+    [self.tableView reloadData];
 
-        // fetch entries for each feed
-        if (feeds.count > 0) {
-            feedingIndex = 0;
-            [self listEntriesAtIndex:feedingIndex];
-        }
-    });
+    // fetch entries for each feed
+    if (self.fetchedResultsController.fetchedObjects.count > 0) {
+        feedingIndex = 0;
+        [self listEntriesAtIndex:feedingIndex];
+    }
 }
 
 - (void)listSubscriptionFailure:(NSError *)error
@@ -305,17 +299,43 @@ int feedingIndex;
     }
 }
 
-- (void)listEntriesSuccess:(Feed *)feed xml:(NSString *)xmlDoc
+- (void)listEntriesSuccess:(Feed *)feed result:(NSArray *)entries
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"*** MasterView: LIST ENTRIES SUCCESS - %@", feed.title);
-        RXMLElement *rootXML = [RXMLElement elementFromXMLString:xmlDoc encoding:NSUTF8StringEncoding];
-        int entryCount = [rootXML children:@"entry"].count;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateEntriesCount:entryCount];
-            [self listEntriesAtIndex:++feedingIndex];
-        });
-    });
+    NSLog(@"*** MasterView: LIST ENTRIES SUCCESS - %@ - %i", feed.title, entries.count);
+    // store to Core Data
+
+    NSManagedObjectContext *context = self.managedObjectContext;
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Entry" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    NSError *error;
+    NSArray *localEntries = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (error) NSLog(@"DATA CORE ERROR: %@", error);
+
+    // sync with local storage - add/edit entries
+    for (Entry *entry in entries) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"link MATCHES %@", entry.link];
+        NSArray *filteredArray = [localEntries filteredArrayUsingPredicate:predicate];
+        if ([filteredArray count] == 0) {
+            Entry *entryToInsert = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
+            NSArray *attKeys = [[entity attributesByName] allKeys];
+            NSDictionary *attributes = [entry dictionaryWithValuesForKeys:attKeys];
+            [entryToInsert setValuesForKeysWithDictionary:attributes];
+            entryToInsert.feed = feed;
+        } else {
+            Entry *entryToUpdate = [filteredArray objectAtIndex:0];
+            entryToUpdate.title = entry.title;
+            entryToUpdate.updated_at = entry.updated_at;
+            entryToUpdate.summary = entry.summary;
+        }
+    }
+
+    NSError *e;
+    [self.managedObjectContext save:&e];
+    if (e) NSLog(@"DATA CORE ERROR: %@", e);
+
+    [self updateEntriesCount:feed.entries.count];
+    [self listEntriesAtIndex:++feedingIndex];
 }
 
 - (void)updateEntriesCount:(int)count

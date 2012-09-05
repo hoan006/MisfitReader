@@ -10,6 +10,7 @@
 #import "RXMLElement.h"
 #import "AppDelegate.h"
 #import "Feed.h"
+#import "Entry.h"
 
 @implementation RssParser
 
@@ -49,6 +50,34 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
+}
+
++ (NSArray *)parseEntries:(NSString *)xmlDoc
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Entry" inManagedObjectContext:context];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'";
+
+    NSMutableArray *result = [NSMutableArray array];
+    RXMLElement *rootXML = [RXMLElement elementFromXMLString:xmlDoc encoding:NSUTF8StringEncoding];
+    [rootXML iterate:@"entry" usingBlock: ^(RXMLElement *entryXML) {
+        Entry *newEntry = [[Entry alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+        for (RXMLElement *linkElement in [entryXML children:@"link"]) {
+            if ([[linkElement attribute:@"rel"] isEqualToString:@"alternate"])
+                newEntry.link = [linkElement attribute:@"href"];
+        }
+        if (newEntry.link.length > 0)
+        {
+            newEntry.title = [entryXML child:@"title"].text;
+            newEntry.published_at = [dateFormatter dateFromString:[entryXML child:@"published"].text];
+            newEntry.updated_at = [dateFormatter dateFromString:[entryXML child:@"updated"].text];
+            newEntry.summary = [entryXML child:@"summary"].text;
+            [result addObject:newEntry];
+        }
+    }];
+    return result;
 }
 
 @end
