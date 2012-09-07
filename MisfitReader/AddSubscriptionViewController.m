@@ -6,12 +6,9 @@
 //
 //
 
-#import "AddSubscriptionViewController.h"
-
 #import "constants.h"
-
+#import "AddSubscriptionViewController.h"
 #import "AFHTTPRequestOperation.h"
-
 #import "BlockAlertView.h"
 #import "BlockBackground.h"
 
@@ -41,12 +38,6 @@
      selector:@selector(feedInputDidChangeText:)
      name:UITextFieldTextDidChangeNotification
      object:_feedInput];
-
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(statusBarDidChangeFrame:)
-     name:UIApplicationDidChangeStatusBarFrameNotification
-     object:nil];
 
     // change User-Agent
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:kCURL_USER_AGENT, @"UserAgent", nil];
@@ -151,44 +142,12 @@ UIActivityIndicatorView *activityIndicator;
     [self alertInvalidFeed];
 }
 
-#define DegreesToRadians(degrees) (degrees * M_PI / 180)
-- (CGAffineTransform)transformForOrientation:(UIInterfaceOrientation)orientation {
-
-    switch (orientation) {
-
-        case UIInterfaceOrientationLandscapeLeft:
-            return CGAffineTransformMakeRotation(-DegreesToRadians(90));
-
-        case UIInterfaceOrientationLandscapeRight:
-            return CGAffineTransformMakeRotation(DegreesToRadians(90));
-
-        case UIInterfaceOrientationPortraitUpsideDown:
-            return CGAffineTransformMakeRotation(DegreesToRadians(180));
-
-        case UIInterfaceOrientationPortrait:
-        default:
-            return CGAffineTransformMakeRotation(DegreesToRadians(0));
-    }
-}
-
-BlockAlertView *alert;
 - (void)alertInvalidFeed
 {
-    alert = [BlockAlertView alertWithTitle:@"Nothing Found"
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Nothing Found"
                                                    message:@"MisfitReader couldn't find a feed at the that location."];
     [alert setCancelButtonWithTitle:@"OK" block:nil];
     [alert show];
-
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    [alert.view setTransform:[self transformForOrientation:orientation]];
-}
-
-- (void)statusBarDidChangeFrame:(NSNotification *)notification
-{
-    if (alert != nil) {
-        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        [alert.view setTransform:[self transformForOrientation:orientation]];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

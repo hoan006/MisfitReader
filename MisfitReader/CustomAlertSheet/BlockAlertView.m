@@ -99,7 +99,7 @@ static UIFont *buttonFont = nil;
         
         _vignetteBackground = NO;
     }
-    
+
     return self;
 }
 
@@ -289,12 +289,21 @@ static UIFont *buttonFont = nil;
                                               [[NSNotificationCenter defaultCenter] postNotificationName:@"AlertViewFinishedAnimations" object:nil];
                                           }];
                      }];
-    
+
     [self retain];
+
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(statusBarDidChangeFrame:)
+     name:UIApplicationDidChangeStatusBarFrameNotification
+     object:nil];
+    [self transformView];
 }
 
-- (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated 
+- (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarFrameNotification object:nil];
+    
     if (buttonIndex >= 0 && buttonIndex < [_blocks count])
     {
         id obj = [[_blocks objectAtIndex: buttonIndex] objectAtIndex:0];
@@ -347,6 +356,39 @@ static UIFont *buttonFont = nil;
     /* Run the button's block */
     int buttonIndex = [sender tag] - 1;
     [self dismissWithClickedButtonIndex:buttonIndex animated:YES];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Rotation
+
+#define DegreesToRadians(degrees) (degrees * M_PI / 180)
+- (CGAffineTransform)transformForOrientation:(UIInterfaceOrientation)orientation {
+
+    switch (orientation) {
+        case UIInterfaceOrientationLandscapeLeft:
+            return CGAffineTransformMakeRotation(-DegreesToRadians(90));
+
+        case UIInterfaceOrientationLandscapeRight:
+            return CGAffineTransformMakeRotation(DegreesToRadians(90));
+
+        case UIInterfaceOrientationPortraitUpsideDown:
+            return CGAffineTransformMakeRotation(DegreesToRadians(180));
+
+        case UIInterfaceOrientationPortrait:
+        default:
+            return CGAffineTransformMakeRotation(DegreesToRadians(0));
+    }
+}
+
+- (void)statusBarDidChangeFrame:(NSNotification *)notification
+{
+    [self transformView];
+}
+
+- (void)transformView
+{
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    [_view setTransform:[self transformForOrientation:orientation]];
 }
 
 @end
