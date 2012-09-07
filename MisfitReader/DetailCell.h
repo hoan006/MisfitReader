@@ -10,10 +10,10 @@
 
 @interface DetailCell : UITableViewCell
 
-@property IBOutlet UIImageView *feedIcon;
-@property IBOutlet UILabel *feedTitle;
-@property IBOutlet UILabel *entryTime;
-@property IBOutlet UILabel *entryTitle;
-@property IBOutlet UILabel *entrySummary;
+@property (weak, nonatomic) IBOutlet UIImageView *feedIcon;
+@property (weak, nonatomic) IBOutlet UILabel *feedTitle;
+@property (weak, nonatomic) IBOutlet UILabel *entryTime;
+@property (weak, nonatomic) IBOutlet UILabel *entryTitle;
+@property (weak, nonatomic) IBOutlet UILabel *entrySummary;
 
 @end

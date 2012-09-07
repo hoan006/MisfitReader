@@ -29,14 +29,17 @@
     [super awakeFromNib];
 }
 
+UIActivityIndicatorView *activityIndicator = nil;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.title = [RssFeeder instance].email;
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"ᐸ" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
     self.navigationController.toolbarHidden = NO;
-    [RssFeeder instance].delegate = self;
+
+    // indicator spinner
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
 
     [self updateSubscriptionList:nil];
 }
@@ -89,10 +92,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        Feed *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        self.detailViewController.filteredFeed = object;
-    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -148,65 +147,65 @@
     return _fetchedResultsController;
 }    
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tableView beginUpdates];
-}
+//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+//{
+//    [self.tableView beginUpdates];
+//}
+//
+//- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+//           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+//{
+//    switch(type) {
+//        case NSFetchedResultsChangeInsert:
+//            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//            
+//        case NSFetchedResultsChangeDelete:
+//            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//    }
+//}
+//
+//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+//       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+//      newIndexPath:(NSIndexPath *)newIndexPath
+//{
+//    UITableView *tableView = self.tableView;
+//    
+//    switch(type) {
+//        case NSFetchedResultsChangeInsert:
+//            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//            
+//        case NSFetchedResultsChangeDelete:
+//            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//            
+//        case NSFetchedResultsChangeUpdate:
+//            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+//            break;
+//            
+//        case NSFetchedResultsChangeMove:
+//            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            break;
+//    }
+//}
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
-{
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
-    UITableView *tableView = self.tableView;
-    
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tableView endUpdates];
-}
+//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+//{
+//    [self.tableView endUpdates];
+//}
 
 /*
 // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
 */
 
-// - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-//{
-//    // In the simplest, most efficient, case, reload the table view.
-//    [self.tableView reloadData];
-//}
+ - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    // In the simplest, most efficient, case, reload the table view.
+    [self.tableView reloadData];
+}
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
@@ -223,7 +222,7 @@
 
 - (void)shouldAddNewFeed:(NSString *)feedURL
 {
-    [[RssFeeder instance] subscribe:3 url:feedURL];
+    [[RssFeeder instance] subscribe:3 url:feedURL delegate:self];
 }
 
 - (void)subscribeSuccess
@@ -238,11 +237,16 @@
     [self showUnknownError];
 }
 
+
 - (IBAction)updateSubscriptionList:(id)sender
 {
-    [[RssFeeder instance] listSubscription:3];
+    UIBarButtonItem *spinnerBarButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [self.navigationItem setRightBarButtonItem:spinnerBarButton];
+    [activityIndicator startAnimating];
+    [[RssFeeder instance] listSubscription:3 delegate:self];
 }
 
+int feedingIndex;
 - (void)listSubscriptionSuccess:(NSArray *)result
 {
     NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST SUCCESS");
@@ -267,7 +271,7 @@
             [self.managedObjectContext deleteObject:feed];
         }
     }
-    
+
     NSError *e;
     [self.managedObjectContext save:&e];
     if (e) NSLog(@"DATA CORE ERROR: %@", e);
@@ -287,16 +291,10 @@
     [self showUnknownError];
 }
 
-
-int feedingIndex;
-
 - (void)listEntriesAtIndex:(int)index
 {
-    NSArray *feeds = self.fetchedResultsController.fetchedObjects;
-    if (index < feeds.count) {
-        Feed *feed = [feeds objectAtIndex:index];
-        [[RssFeeder instance] listEntries:3 feed:feed];
-    }
+    Feed *feed = [[self.fetchedResultsController fetchedObjects] objectAtIndex:index];
+    [[RssFeeder instance] listEntries:3 feed:feed delegate:self];
 }
 
 - (void)listEntriesSuccess:(Feed *)feed result:(NSArray *)entries
@@ -335,7 +333,12 @@ int feedingIndex;
     if (e) NSLog(@"DATA CORE ERROR: %@", e);
 
     [self updateEntriesCount:feed.entries.count];
-    [self listEntriesAtIndex:++feedingIndex];
+    if (++feedingIndex < [self.fetchedResultsController fetchedObjects].count) {
+        [self listEntriesAtIndex:feedingIndex];
+    } else {
+        [activityIndicator stopAnimating];
+        [self.navigationItem setRightBarButtonItem:self.addSubscriptionButton];
+    }
 }
 
 - (void)updateEntriesCount:(int)count

@@ -81,17 +81,17 @@
     [operation start];
 }
 
-- (void)listSubscription:(int)attempts
+- (void)listSubscription:(int)attempts delegate:(id<RssFeederDelegate>)delegate
 {
-    [self listSubscription:attempts authValue:self.authValue];
+    [self listSubscription:attempts authValue:self.authValue delegate:delegate];
 }
 
-- (void)listSubscription:(int)attempts authValue:(NSString *)aAuthValue
+- (void)listSubscription:(int)attempts authValue:(NSString *)aAuthValue delegate:(id<RssFeederDelegate>)delegate
 {
     if (attempts <= 0) {
         //TODO: detect useful error
-        if ([self.delegate respondsToSelector:@selector(listSubscriptionFailure:)]) {
-            [self.delegate listSubscriptionFailure:nil];
+        if ([delegate respondsToSelector:@selector(listSubscriptionFailure:)]) {
+            [delegate listSubscriptionFailure:nil];
         }
         return;
     }
@@ -107,8 +107,8 @@
             NSLog(@"### FEED SUCCESS ###: %@", operation.responseString);
             NSArray *result = [RssParser parseFeeds:operation.responseString];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if ([self.delegate respondsToSelector:@selector(listSubscriptionSuccess:)]) {
-                    [self.delegate listSubscriptionSuccess:result];
+                if ([delegate respondsToSelector:@selector(listSubscriptionSuccess:)]) {
+                    [delegate listSubscriptionSuccess:result];
                 }
                 // update feeder
                 [self saveAuthValue:aAuthValue andToken:self.token];
@@ -117,23 +117,23 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### FEED ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
-            [self listSubscription:attempts -1 authValue:authValue];
+            [self listSubscription:attempts -1 authValue:authValue delegate:delegate];
         }];
     }];
     [operation start];
 }
 
-- (void)subscribe:(int)attempts url:(NSString *)feedURL
+- (void)subscribe:(int)attempts url:(NSString *)feedURL delegate:(id<RssFeederDelegate>)delegate
 {
-    [self subscribe:attempts url:feedURL authValue:self.authValue token:self.token];
+    [self subscribe:attempts url:feedURL authValue:self.authValue token:self.token delegate:delegate];
 }
 
-- (void)subscribe:(int)attempts url:(NSString *)feedURL authValue:(NSString *)aAuthValue token:(NSString *)aToken
+- (void)subscribe:(int)attempts url:(NSString *)feedURL authValue:(NSString *)aAuthValue token:(NSString *)aToken delegate:(id<RssFeederDelegate>)delegate
 {
     if (attempts <= 0) {
         //TODO: Detect useful error
-        if ([self.delegate respondsToSelector:@selector(subscribeFailure:)]) {
-            [self.delegate subscribeFailure:nil];
+        if ([delegate respondsToSelector:@selector(subscribeFailure:)]) {
+            [delegate subscribeFailure:nil];
         }
         return;
     }
@@ -149,31 +149,112 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"### SUBSCRIBE SUCCESS ###: %@", operation.responseString);
-        if ([self.delegate respondsToSelector:@selector(subscribeSuccess)]) {
-            [self.delegate subscribeSuccess];
+        if ([delegate respondsToSelector:@selector(subscribeSuccess)]) {
+            [delegate subscribeSuccess];
         }
         // update feeder
         [self saveAuthValue:aAuthValue andToken:aToken];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### SUBSCRIBE ERROR ###: %@",  operation.responseString);
         [self requestToken:^(NSString *newAuthValue, NSString *newToken){
-            [self subscribe:attempts - 1 url:feedURL authValue:newAuthValue token:newToken];
+            [self subscribe:attempts - 1 url:feedURL authValue:newAuthValue token:newToken delegate:delegate];
         }];
     }];
     [operation start];
 }
 
-- (void)listEntries:(int)attempts feed:(Feed *)feed
+- (void)renameSubscription:(int)attempts feed:(Feed *)feed newName:(NSString *)newName delegate:(id<RssFeederDelegate>)delegate
 {
-    [self listEntries:attempts feed:feed authValue:self.authValue];
+    [self renameSubscription:attempts feed:feed newName:newName authValue:self.authValue token:self.token delegate:delegate];
 }
 
-- (void)listEntries:(int)attempts feed:(Feed *)feed authValue:(NSString *)aAuthValue
+- (void)renameSubscription:(int)attempts feed:(Feed *)feed newName:(NSString *)newName authValue:(NSString *)aAuthValue token:(NSString *)aToken delegate:(id<RssFeederDelegate>)delegate
 {
     if (attempts <= 0) {
         //TODO: Detect useful error
-        if ([self.delegate respondsToSelector:@selector(listEntriesFailure:error:)]) {
-            [self.delegate listEntriesFailure:feed error:nil];
+        if ([delegate respondsToSelector:@selector(renameSubscriptionFailure:error:)]) {
+            [delegate renameSubscriptionFailure:feed error:nil];
+        }
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_EDIT];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+    NSString *data = [NSString stringWithFormat:@"s=%@&ac=edit&t=%@&T=%@", feed.rss_url, newName, aToken];
+    [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### RENAME SUCCESS ###: %@", operation.responseString);
+        if ([delegate respondsToSelector:@selector(renameSubscriptionSuccess:)]) {
+            feed.title = newName;
+            [delegate renameSubscriptionSuccess:feed];
+        }
+        // update feeder
+        [self saveAuthValue:aAuthValue andToken:aToken];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### RENAME ERROR ###: %@",  operation.responseString);
+        [self requestToken:^(NSString *newAuthValue, NSString *newToken){
+            [self renameSubscription:attempts - 1 feed:feed newName:newName authValue:newAuthValue token:newToken delegate:delegate];
+        }];
+    }];
+    [operation start];
+}
+
+- (void)unsubscribe:(int)attempts feed:(Feed *)feed delegate:(id<RssFeederDelegate>)delegate
+{
+    [self unsubscribe:attempts feed:feed authValue:self.authValue token:self.token delegate:delegate];
+}
+
+- (void)unsubscribe:(int)attempts feed:(Feed *)feed authValue:(NSString *)aAuthValue token:(NSString *)aToken delegate:(id<RssFeederDelegate>)delegate
+{
+    if (attempts <= 0) {
+        //TODO: Detect useful error
+        if ([delegate respondsToSelector:@selector(renameSubscriptionFailure:error:)]) {
+            [delegate renameSubscriptionFailure:feed error:nil];
+        }
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_EDIT];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+    NSString *data = [NSString stringWithFormat:@"s=%@&ac=unsubscribe&t=%@&T=%@", feed.rss_url, feed.title, aToken];
+    [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### RENAME SUCCESS ###: %@", operation.responseString);
+        if ([delegate respondsToSelector:@selector(renameSubscriptionSuccess:)]) {
+            [delegate unsubscribeSuccess:feed];
+        }
+        // update feeder
+        [self saveAuthValue:aAuthValue andToken:aToken];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### RENAME ERROR ###: %@",  operation.responseString);
+        [self requestToken:^(NSString *newAuthValue, NSString *newToken){
+            [self unsubscribe:attempts - 1 feed:feed authValue:newAuthValue token:newToken delegate:delegate];
+        }];
+    }];
+    [operation start];
+}
+
+- (void)listEntries:(int)attempts feed:(Feed *)feed delegate:(id<RssFeederDelegate>)delegate
+{
+    [self listEntries:attempts feed:feed authValue:self.authValue delegate:delegate];
+}
+
+- (void)listEntries:(int)attempts feed:(Feed *)feed authValue:(NSString *)aAuthValue delegate:(id<RssFeederDelegate>)delegate
+{
+    if (attempts <= 0) {
+        //TODO: Detect useful error
+        if ([delegate respondsToSelector:@selector(listEntriesFailure:error:)]) {
+            [delegate listEntriesFailure:feed error:nil];
         }
         return;
     }
@@ -191,14 +272,14 @@
             {
                 NSLog(@"### LIST ENTRIES REDIRECT ###");
                 [self authenticateEmail:^(NSString *authValue){
-                    [self listEntries:attempts -1 feed:feed authValue:authValue];
+                    [self listEntries:attempts -1 feed:feed authValue:authValue delegate:delegate];
                 }];
             } else {
                 NSLog(@"### LIST ENTRIES SUCCESS ###");
                 NSArray *entries = [RssParser parseEntries:operation.responseString];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([self.delegate respondsToSelector:@selector(listEntriesSuccess:result:)]) {
-                        [self.delegate listEntriesSuccess:feed result:entries];
+                    if ([delegate respondsToSelector:@selector(listEntriesSuccess:result:)]) {
+                        [delegate listEntriesSuccess:feed result:entries];
                     }
                 });
             }
@@ -208,7 +289,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### LIST ENTRIES ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
-            [self listEntries:attempts -1 feed:feed authValue:authValue];
+            [self listEntries:attempts -1 feed:feed authValue:authValue delegate:delegate];
         }];
     }];
     [operation start];

@@ -14,4 +14,4 @@
 #define kMAXIMUM_ITEMS_PER_FEED 100
 #define kGOOGLE_READER_TOKEN @"http://www.google.com/reader/api/0/token"
 #define kGOOGLE_READER_SUBSCRIBE @"http://www.google.com/reader/api/0/subscription/quickadd"
-#define kGOOGLE_READER_UNSUBSCRIBE @"http://www.google.com/reader/api/0/subscription/edit"
+#define kGOOGLE_READER_EDIT @"http://www.google.com/reader/api/0/subscription/edit"

@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *addSubscriptionButton;
 - (IBAction)openSubscriptionView:(id)sender;
 - (IBAction)updateSubscriptionList:(id)sender;
 

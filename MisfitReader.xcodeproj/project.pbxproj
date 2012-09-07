@@ -73,6 +73,9 @@
 		FCA28AE215F5B305003F20BB /* MasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE115F5B305003F20BB /* MasterCell.m */; };
 		FCA28AE615F5D580003F20BB /* DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE515F5D580003F20BB /* DetailCell.m */; };
 		FCA28AED15F70180003F20BB /* DetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCA28AEC15F70180003F20BB /* DetailCell.xib */; };
+		FCA28AF815F738DB003F20BB /* SummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AF715F738DA003F20BB /* SummaryViewController.m */; };
+		FCA28B0015F75D63003F20BB /* FeedInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AFF15F75D62003F20BB /* FeedInfoViewController.m */; };
+		FCA28B4C15F85234003F20BB /* WebsiteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28B4B15F85233003F20BB /* WebsiteViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +189,13 @@
 		FCA28AE515F5D580003F20BB /* DetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailCell.m; sourceTree = "<group>"; };
 		FCA28AE715F6F138003F20BB /* NSString_StrippingHTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSString_StrippingHTML.h; sourceTree = "<group>"; };
 		FCA28AEC15F70180003F20BB /* DetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailCell.xib; sourceTree = "<group>"; };
+		FCA28AF615F738DA003F20BB /* SummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummaryViewController.h; sourceTree = "<group>"; };
+		FCA28AF715F738DA003F20BB /* SummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummaryViewController.m; sourceTree = "<group>"; };
+		FCA28AFA15F74E9A003F20BB /* UIBarButtonItem_ImageButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIBarButtonItem_ImageButton.h; sourceTree = "<group>"; };
+		FCA28AFE15F75D62003F20BB /* FeedInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedInfoViewController.h; sourceTree = "<group>"; };
+		FCA28AFF15F75D62003F20BB /* FeedInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedInfoViewController.m; sourceTree = "<group>"; };
+		FCA28B4A15F85233003F20BB /* WebsiteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebsiteViewController.h; sourceTree = "<group>"; };
+		FCA28B4B15F85233003F20BB /* WebsiteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebsiteViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +282,13 @@
 				FCA28AEC15F70180003F20BB /* DetailCell.xib */,
 				FC3848A815EDC62800BA315F /* DetailViewController.h */,
 				FC3848A915EDC62800BA315F /* DetailViewController.m */,
+				FCA28AFA15F74E9A003F20BB /* UIBarButtonItem_ImageButton.h */,
+				FCA28AFE15F75D62003F20BB /* FeedInfoViewController.h */,
+				FCA28AFF15F75D62003F20BB /* FeedInfoViewController.m */,
+				FCA28B4A15F85233003F20BB /* WebsiteViewController.h */,
+				FCA28B4B15F85233003F20BB /* WebsiteViewController.m */,
+				FCA28AF615F738DA003F20BB /* SummaryViewController.h */,
+				FCA28AF715F738DA003F20BB /* SummaryViewController.m */,
 				FC3848A215EDC62800BA315F /* MisfitReader.xcdatamodeld */,
 				FCA28AE715F6F138003F20BB /* NSString_StrippingHTML.h */,
 				FC38489115EDC62800BA315F /* Supporting Files */,
@@ -576,6 +593,9 @@
 				FCA28ADC15F4A379003F20BB /* Feed.m in Sources */,
 				FCA28AE215F5B305003F20BB /* MasterCell.m in Sources */,
 				FCA28AE615F5D580003F20BB /* DetailCell.m in Sources */,
+				FCA28AF815F738DB003F20BB /* SummaryViewController.m in Sources */,
+				FCA28B0015F75D63003F20BB /* FeedInfoViewController.m in Sources */,
+				FCA28B4C15F85234003F20BB /* WebsiteViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
