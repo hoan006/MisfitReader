@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC0EA6F215FD8A70002F81A5 /* ButtonNavBack.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA6F115FD8A70002F81A5 /* ButtonNavBack.png */; };
+		FC0EA6F515FDA0E8002F81A5 /* DefaultNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = FC0EA6F415FDA0E8002F81A5 /* DefaultNavigationBar.m */; };
+		FC0EA6F815FDA57C002F81A5 /* noise_sepia.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA6F615FDA57C002F81A5 /* noise_sepia.png */; };
+		FC0EA6F915FDA57C002F81A5 /* noise.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA6F715FDA57C002F81A5 /* noise.png */; };
+		FC0EA70115FDCAD4002F81A5 /* SliderReadability.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA70015FDCAD4002F81A5 /* SliderReadability.png */; };
+		FC0EA70315FDCB52002F81A5 /* ButtonFonts.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA70215FDCB52002F81A5 /* ButtonFonts.png */; };
 		FC38488915EDC62800BA315F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488815EDC62800BA315F /* UIKit.framework */; };
 		FC38488B15EDC62800BA315F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488A15EDC62800BA315F /* Foundation.framework */; };
 		FC38488D15EDC62800BA315F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488C15EDC62800BA315F /* CoreGraphics.framework */; };
@@ -68,6 +74,16 @@
 		FC46018C15F057BD00FB5DA6 /* alert-red-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC46017615F057BD00FB5DA6 /* alert-red-button@2x.png */; };
 		FC46018D15F057BD00FB5DA6 /* alert-window.png in Resources */ = {isa = PBXBuildFile; fileRef = FC46017715F057BD00FB5DA6 /* alert-window.png */; };
 		FC46018E15F057BD00FB5DA6 /* alert-window@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC46017815F057BD00FB5DA6 /* alert-window@2x.png */; };
+		FC6EF86C15FDE70200B68CE1 /* ButtonNext.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF86615FDE70200B68CE1 /* ButtonNext.png */; };
+		FC6EF86D15FDE70200B68CE1 /* ButtonPrevious.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF86715FDE70200B68CE1 /* ButtonPrevious.png */; };
+		FC6EF86E15FDE70200B68CE1 /* ButtonRead.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF86815FDE70200B68CE1 /* ButtonRead.png */; };
+		FC6EF86F15FDE70200B68CE1 /* ButtonStarred.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF86915FDE70200B68CE1 /* ButtonStarred.png */; };
+		FC6EF87015FDE70200B68CE1 /* ButtonUnread.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF86A15FDE70200B68CE1 /* ButtonUnread.png */; };
+		FC6EF87115FDE70200B68CE1 /* ButtonUnstarred.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF86B15FDE70200B68CE1 /* ButtonUnstarred.png */; };
+		FC6EF87415FDE75C00B68CE1 /* ButtonReadability.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF87315FDE75C00B68CE1 /* ButtonReadability.png */; };
+		FC6EF87615FDE7A100B68CE1 /* ButtonAction.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6EF87515FDE7A100B68CE1 /* ButtonAction.png */; };
+		FC6EF87815FDF41E00B68CE1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6EF87715FDF41E00B68CE1 /* QuartzCore.framework */; };
+		FC6EF87E15FDF89B00B68CE1 /* DefaultNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC6EF87D15FDF89B00B68CE1 /* DefaultNavigationController.m */; };
 		FC7A20A315F0A70600F5D23B /* RssParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7A20A215F0A70600F5D23B /* RssParser.m */; };
 		FCA28ADC15F4A379003F20BB /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28ADB15F4A379003F20BB /* Feed.m */; };
 		FCA28AE215F5B305003F20BB /* MasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE115F5B305003F20BB /* MasterCell.m */; };
@@ -89,6 +105,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FC0EA6F115FD8A70002F81A5 /* ButtonNavBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonNavBack.png; sourceTree = "<group>"; };
+		FC0EA6F315FDA0E8002F81A5 /* DefaultNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultNavigationBar.h; sourceTree = "<group>"; };
+		FC0EA6F415FDA0E8002F81A5 /* DefaultNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultNavigationBar.m; sourceTree = "<group>"; };
+		FC0EA6F615FDA57C002F81A5 /* noise_sepia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noise_sepia.png; sourceTree = "<group>"; };
+		FC0EA6F715FDA57C002F81A5 /* noise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noise.png; sourceTree = "<group>"; };
+		FC0EA70015FDCAD4002F81A5 /* SliderReadability.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SliderReadability.png; sourceTree = "<group>"; };
+		FC0EA70215FDCB52002F81A5 /* ButtonFonts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonFonts.png; sourceTree = "<group>"; };
 		FC38488415EDC62800BA315F /* MisfitReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MisfitReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC38488815EDC62800BA315F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FC38488A15EDC62800BA315F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -178,6 +201,17 @@
 		FC46017615F057BD00FB5DA6 /* alert-red-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-red-button@2x.png"; sourceTree = "<group>"; };
 		FC46017715F057BD00FB5DA6 /* alert-window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-window.png"; sourceTree = "<group>"; };
 		FC46017815F057BD00FB5DA6 /* alert-window@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-window@2x.png"; sourceTree = "<group>"; };
+		FC6EF86615FDE70200B68CE1 /* ButtonNext.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonNext.png; sourceTree = "<group>"; };
+		FC6EF86715FDE70200B68CE1 /* ButtonPrevious.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonPrevious.png; sourceTree = "<group>"; };
+		FC6EF86815FDE70200B68CE1 /* ButtonRead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonRead.png; sourceTree = "<group>"; };
+		FC6EF86915FDE70200B68CE1 /* ButtonStarred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonStarred.png; sourceTree = "<group>"; };
+		FC6EF86A15FDE70200B68CE1 /* ButtonUnread.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonUnread.png; sourceTree = "<group>"; };
+		FC6EF86B15FDE70200B68CE1 /* ButtonUnstarred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonUnstarred.png; sourceTree = "<group>"; };
+		FC6EF87315FDE75C00B68CE1 /* ButtonReadability.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonReadability.png; sourceTree = "<group>"; };
+		FC6EF87515FDE7A100B68CE1 /* ButtonAction.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonAction.png; sourceTree = "<group>"; };
+		FC6EF87715FDF41E00B68CE1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FC6EF87C15FDF89B00B68CE1 /* DefaultNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultNavigationController.h; sourceTree = "<group>"; };
+		FC6EF87D15FDF89B00B68CE1 /* DefaultNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultNavigationController.m; sourceTree = "<group>"; };
 		FC7A20A115F0A70600F5D23B /* RssParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RssParser.h; sourceTree = "<group>"; };
 		FC7A20A215F0A70600F5D23B /* RssParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssParser.m; sourceTree = "<group>"; };
 		FCA28ADA15F4A379003F20BB /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
@@ -203,6 +237,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC6EF87815FDF41E00B68CE1 /* QuartzCore.framework in Frameworks */,
 				FC3848F515EDC68300BA315F /* libz.dylib in Frameworks */,
 				FC3848F315EDC67D00BA315F /* libxml2.dylib in Frameworks */,
 				FC38488915EDC62800BA315F /* UIKit.framework in Frameworks */,
@@ -226,6 +261,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC0EA6ED15FD87AE002F81A5 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				FC6EF87515FDE7A100B68CE1 /* ButtonAction.png */,
+				FC6EF87315FDE75C00B68CE1 /* ButtonReadability.png */,
+				FC6EF86615FDE70200B68CE1 /* ButtonNext.png */,
+				FC6EF86715FDE70200B68CE1 /* ButtonPrevious.png */,
+				FC6EF86815FDE70200B68CE1 /* ButtonRead.png */,
+				FC6EF86915FDE70200B68CE1 /* ButtonStarred.png */,
+				FC6EF86A15FDE70200B68CE1 /* ButtonUnread.png */,
+				FC6EF86B15FDE70200B68CE1 /* ButtonUnstarred.png */,
+				FC0EA70215FDCB52002F81A5 /* ButtonFonts.png */,
+				FC0EA70015FDCAD4002F81A5 /* SliderReadability.png */,
+				FC0EA6F615FDA57C002F81A5 /* noise_sepia.png */,
+				FC0EA6F715FDA57C002F81A5 /* noise.png */,
+				FC0EA6F115FD8A70002F81A5 /* ButtonNavBack.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		FC38487915EDC62800BA315F = {
 			isa = PBXGroup;
 			children = (
@@ -248,6 +303,7 @@
 		FC38488715EDC62800BA315F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FC6EF87715FDF41E00B68CE1 /* QuartzCore.framework */,
 				FC3848F415EDC68300BA315F /* libz.dylib */,
 				FC3848F215EDC67D00BA315F /* libxml2.dylib */,
 				FC38488815EDC62800BA315F /* UIKit.framework */,
@@ -262,6 +318,8 @@
 		FC38489015EDC62800BA315F /* MisfitReader */ = {
 			isa = PBXGroup;
 			children = (
+				FC6EF87C15FDF89B00B68CE1 /* DefaultNavigationController.h */,
+				FC6EF87D15FDF89B00B68CE1 /* DefaultNavigationController.m */,
 				FC46015215F0559D00FB5DA6 /* CustomAlertSheet */,
 				FC3848FF15EDC86700BA315F /* AFNetworking */,
 				FC38491515EDC86700BA315F /* Models */,
@@ -271,6 +329,8 @@
 				FCA28AE315F5B730003F20BB /* UIApplication_AppDimensions.h */,
 				FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */,
 				FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */,
+				FC0EA6F315FDA0E8002F81A5 /* DefaultNavigationBar.h */,
+				FC0EA6F415FDA0E8002F81A5 /* DefaultNavigationBar.m */,
 				FC384AA715EDF34D00BA315F /* AddSubscriptionViewController.h */,
 				FC384AA815EDF34D00BA315F /* AddSubscriptionViewController.m */,
 				FCA28AE015F5B305003F20BB /* MasterCell.h */,
@@ -299,6 +359,7 @@
 		FC38489115EDC62800BA315F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FC0EA6ED15FD87AE002F81A5 /* images */,
 				FC46016115F057BD00FB5DA6 /* ActionSheet */,
 				FC46017015F057BD00FB5DA6 /* AlertView */,
 				FC38489215EDC62800BA315F /* MisfitReader-Info.plist */,
@@ -531,6 +592,19 @@
 				FC46018D15F057BD00FB5DA6 /* alert-window.png in Resources */,
 				FC46018E15F057BD00FB5DA6 /* alert-window@2x.png in Resources */,
 				FCA28AED15F70180003F20BB /* DetailCell.xib in Resources */,
+				FC0EA6F215FD8A70002F81A5 /* ButtonNavBack.png in Resources */,
+				FC0EA6F815FDA57C002F81A5 /* noise_sepia.png in Resources */,
+				FC0EA6F915FDA57C002F81A5 /* noise.png in Resources */,
+				FC0EA70115FDCAD4002F81A5 /* SliderReadability.png in Resources */,
+				FC0EA70315FDCB52002F81A5 /* ButtonFonts.png in Resources */,
+				FC6EF86C15FDE70200B68CE1 /* ButtonNext.png in Resources */,
+				FC6EF86D15FDE70200B68CE1 /* ButtonPrevious.png in Resources */,
+				FC6EF86E15FDE70200B68CE1 /* ButtonRead.png in Resources */,
+				FC6EF86F15FDE70200B68CE1 /* ButtonStarred.png in Resources */,
+				FC6EF87015FDE70200B68CE1 /* ButtonUnread.png in Resources */,
+				FC6EF87115FDE70200B68CE1 /* ButtonUnstarred.png in Resources */,
+				FC6EF87415FDE75C00B68CE1 /* ButtonReadability.png in Resources */,
+				FC6EF87615FDE7A100B68CE1 /* ButtonAction.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -596,6 +670,8 @@
 				FCA28AF815F738DB003F20BB /* SummaryViewController.m in Sources */,
 				FCA28B0015F75D63003F20BB /* FeedInfoViewController.m in Sources */,
 				FCA28B4C15F85234003F20BB /* WebsiteViewController.m in Sources */,
+				FC0EA6F515FDA0E8002F81A5 /* DefaultNavigationBar.m in Sources */,
+				FC6EF87E15FDF89B00B68CE1 /* DefaultNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,13 +21,10 @@
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
     controller.managedObjectContext = self.managedObjectContext;
-    UINavigationBar *navBar = [UINavigationBar appearance];
-    navBar.barStyle = UIBarStyleBlack;
-    UINavigationBar *toolBar = [UIToolbar appearance];
-    toolBar.barStyle = UIBarStyleBlackTranslucent;
+
     return YES;
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

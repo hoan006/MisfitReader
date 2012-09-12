@@ -36,7 +36,6 @@ UIActivityIndicatorView *activityIndicator = nil;
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.title = [RssFeeder instance].email;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
-    self.navigationController.toolbarHidden = NO;
 
     // indicator spinner
     activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
@@ -254,7 +253,7 @@ int feedingIndex;
 
     // sync with local storage - add/rename feeds
     for (Feed *feed in result) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url == %@", feed.rss_url];
         NSArray *filteredArray = [feeds filteredArrayUsingPredicate:predicate];
         if ([filteredArray count] == 0) {
             [self.managedObjectContext insertObject:feed];
@@ -265,7 +264,7 @@ int feedingIndex;
 
     // sync with local storage - remove feeds
     for (Feed *feed in feeds) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url MATCHES %@", feed.rss_url];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"rss_url == %@", feed.rss_url];
         NSArray *filteredArray = [result filteredArrayUsingPredicate:predicate];
         if ([filteredArray count] == 0) {
             [self.managedObjectContext deleteObject:feed];
@@ -288,6 +287,7 @@ int feedingIndex;
 - (void)listSubscriptionFailure:(NSError *)error
 {
     NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST FAILURE");
+    [activityIndicator stopAnimating];
     [self showUnknownError];
 }
 
@@ -312,7 +312,7 @@ int feedingIndex;
 
     // sync with local storage - add/edit entries
     for (Entry *entry in entries) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"link MATCHES %@", entry.link];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"link == %@", entry.link];
         NSArray *filteredArray = [localEntries filteredArrayUsingPredicate:predicate];
         if ([filteredArray count] == 0) {
             Entry *entryToInsert = [NSEntityDescription insertNewObjectForEntityForName:@"Entry" inManagedObjectContext:context];
@@ -332,7 +332,7 @@ int feedingIndex;
     [self.managedObjectContext save:&e];
     if (e) NSLog(@"DATA CORE ERROR: %@", e);
 
-    [self updateEntriesCount:feed.entries.count];
+    [self updateEntriesCount:[feed.entries count]];
     if (++feedingIndex < [self.fetchedResultsController fetchedObjects].count) {
         [self listEntriesAtIndex:feedingIndex];
     } else {

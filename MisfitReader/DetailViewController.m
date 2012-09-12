@@ -74,6 +74,11 @@
         NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"DetailCell" owner:self options:nil];
         // Grab a pointer to the first object (presumably the custom cell, as that's all the XIB should contain).
         cell = [topLevelObjects objectAtIndex:0];
+        
+        // force cell to resize width
+        CGRect frame = cell.frame;
+        frame.size.width = self.tableView.frame.size.width;
+        cell.frame = frame;
     }
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
@@ -226,6 +231,7 @@
     CGSize labelSize = [detailCell.entryTitle.text sizeWithFont:detailCell.entryTitle.font];
     CGRect titleFrame = detailCell.entryTitle.frame;
     CGRect summaryFrame = detailCell.entrySummary.frame;
+
     if (labelSize.width > detailCell.entryTitle.frame.size.width) {
         titleFrame.size.height = 40;
         summaryFrame.origin.y = 40;
