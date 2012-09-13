@@ -13,21 +13,20 @@
 #import "AppDelegate.h"
 #import "AccountSetting.h"
 #import "Feed.h"
+#import "Entry.h"
 
 @implementation RssFeeder
 
 + (RssFeeder *)instance
 {
-    static RssFeeder *_instance = nil;
+    static dispatch_once_t once;
+    static RssFeeder *instance;
+    dispatch_once(&once, ^{
+        instance = [[self alloc] init];
+        [instance loadFromCoreData];
+    });
     
-    @synchronized( self ) {
-        if( _instance == nil ) {
-            _instance = [[ RssFeeder alloc ] init ];
-            [_instance loadFromCoreData];
-        }
-    }
-    
-    return _instance;
+    return instance;
 }
 
 - (void)authenticateEmail:(void (^)(NSString *))followup {
@@ -121,6 +120,47 @@
         }];
     }];
     [operation start];
+}
+
+- (void)listUnreadCount:(int)attempts delegate:(id<RssFeederDelegate>)delegate {
+    [self listUnreadCount:attempts authValue:self.authValue delegate:delegate];
+}
+
+- (void)listUnreadCount:(int)attempts authValue:(NSString *)aAuthValue delegate:(id<RssFeederDelegate>)delegate {
+    if (attempts <= 0) {
+        //TODO: detect useful error
+        if ([delegate respondsToSelector:@selector(listUnreadCountFailure:)]) {
+            [delegate listUnreadCountFailure:nil];
+        }
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_UNREAD_COUNT];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"### UNREAD COUNT SUCCESS ###: %@", operation.responseString);
+            NSDictionary *result = [RssParser parseUnreadCount:operation.responseString];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([delegate respondsToSelector:@selector(listUnreadCountSuccess:)]) {
+                    [delegate listUnreadCountSuccess:result];
+                }
+                // update feeder
+                [self saveAuthValue:aAuthValue andToken:self.token];
+            });
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### UNREAD COUNT ERROR ###: %@",  operation.responseString);
+        [self authenticateEmail:^(NSString *authValue){
+            [self listUnreadCount:attempts -1 authValue:authValue delegate:delegate];
+        }];
+    }];
+    [operation start];
+
 }
 
 - (void)subscribe:(int)attempts url:(NSString *)feedURL delegate:(id<RssFeederDelegate>)delegate
@@ -244,12 +284,12 @@
     [operation start];
 }
 
-- (void)listEntries:(int)attempts feed:(Feed *)feed delegate:(id<RssFeederDelegate>)delegate
+- (void)listEntries:(int)attempts feed:(Feed *)feed unreadCount:(int)unreadCount delegate:(id<RssFeederDelegate>)delegate
 {
-    [self listEntries:attempts feed:feed authValue:self.authValue delegate:delegate];
+    [self listEntries:attempts feed:feed unreadCount:unreadCount authValue:self.authValue delegate:delegate];
 }
 
-- (void)listEntries:(int)attempts feed:(Feed *)feed authValue:(NSString *)aAuthValue delegate:(id<RssFeederDelegate>)delegate
+- (void)listEntries:(int)attempts feed:(Feed *)feed unreadCount:(int)unreadCount authValue:(NSString *)aAuthValue delegate:(id<RssFeederDelegate>)delegate
 {
     if (attempts <= 0) {
         //TODO: Detect useful error
@@ -258,7 +298,9 @@
         }
         return;
     }
-    NSURL *url = [NSURL URLWithString:[kGOOGLE_READER_NEW_FEEDS stringByAppendingString:feed.rss_url]];
+    NSString *urlString = [feed.entries count] == 0 ? [NSString stringWithFormat:kGOOGLE_READER_UNREAD_ENTRIES_FROM_FEED_URL_AND_COUNT, feed.rss_url, @(unreadCount)] : [NSString stringWithFormat:kGOOGLE_READER_UNREAD_ENTRIES_FROM_FEED_URL_AND_TIMESTAMP, feed.rss_url, @((int)(double)[self.beginningTimestamp timeIntervalSince1970])];
+
+    NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
     [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
@@ -272,10 +314,10 @@
             {
                 NSLog(@"### LIST ENTRIES REDIRECT ###");
                 [self authenticateEmail:^(NSString *authValue){
-                    [self listEntries:attempts -1 feed:feed authValue:authValue delegate:delegate];
+                    [self listEntries:attempts -1 feed:feed unreadCount:unreadCount authValue:authValue delegate:delegate];
                 }];
             } else {
-                NSLog(@"### LIST ENTRIES SUCCESS ###");
+                NSLog(@"### LIST ENTRIES SUCCESS ### ");
                 NSArray *entries = [RssParser parseEntries:operation.responseString];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([delegate respondsToSelector:@selector(listEntriesSuccess:result:)]) {
@@ -289,7 +331,99 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### LIST ENTRIES ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
-            [self listEntries:attempts -1 feed:feed authValue:authValue delegate:delegate];
+            [self listEntries:attempts -1 feed:feed unreadCount:unreadCount authValue:authValue delegate:delegate];
+        }];
+    }];
+    [operation start];
+}
+
+- (void)readEntry:(int)attempts entry:(Entry *)entry status:(BOOL)status delegate:(id<RssFeederDelegate>)delegate
+{
+    [self readEntry:attempts entry:entry status:status authValue:self.authValue token:self.token delegate:delegate];
+}
+
+- (void)readEntry:(int)attempts entry:(Entry *)entry status:(BOOL)status authValue:(NSString *)aAuthValue token:(NSString *)aToken delegate:(id<RssFeederDelegate>)delegate
+{
+    if (attempts <= 0) {
+        //TODO: Detect useful error
+        if ([delegate respondsToSelector:@selector(readEntryFailure:error:)]) {
+            [delegate readEntryFailure:entry error:nil];
+        }
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_SET_TAG];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+    NSString *data;
+    if (status) // add 'read' tag and remove 'kept-unread' tag
+    {
+        data = [NSString stringWithFormat:@"r=%@&a=%@&async=true&s=%@&i=%@&T=%@", kGOOGLE_READER_USER_STATE_KEPT_UNREAD, kGOOGLE_READER_USER_STATE_READ, entry.feed.rss_url, entry.tag_id, aToken];
+    } else {
+        data = [NSString stringWithFormat:@"r=%@&a=%@&async=true&s=%@&i=%@&T=%@", kGOOGLE_READER_USER_STATE_READ, kGOOGLE_READER_USER_STATE_KEPT_UNREAD, entry.feed.rss_url, entry.tag_id, aToken];
+    }
+    [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### READ ENTRY SUCCESS ###: %@", operation.responseString);
+        if ([delegate respondsToSelector:@selector(readEntrySuccess:)]) {
+            [delegate readEntrySuccess:entry];
+        }
+        // update feeder
+        [self saveAuthValue:aAuthValue andToken:aToken];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### READ ENTRY ERROR ###: %@",  operation.responseString);
+        [self requestToken:^(NSString *newAuthValue, NSString *newToken){
+            [self readEntry:attempts - 1 entry:entry status:status authValue:newAuthValue token:newToken delegate:delegate];
+        }];
+    }];
+    [operation start];
+}
+
+- (void)starEntry:(int)attempts entry:(Entry *)entry status:(BOOL)status delegate:(id<RssFeederDelegate>)delegate
+{
+    [self starEntry:attempts entry:entry status:status authValue:self.authValue token:self.token delegate:delegate];
+}
+
+- (void)starEntry:(int)attempts entry:(Entry *)entry status:(BOOL)status authValue:(NSString *)aAuthValue token:(NSString *)aToken delegate:(id<RssFeederDelegate>)delegate
+{
+    if (attempts <= 0) {
+        //TODO: Detect useful error
+        if ([delegate respondsToSelector:@selector(starEntryFailure:error:)]) {
+            [delegate starEntryFailure:entry error:nil];
+        }
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_SET_TAG];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+    NSString *data;
+    if (status) // add 'read' tag and remove 'kept-unread' tag
+    {
+        data = [NSString stringWithFormat:@"r=%@&async=true&s=%@&i=%@&T=%@", kGOOGLE_READER_USER_STATE_STARRED, entry.feed.rss_url, entry.tag_id, aToken];
+    } else {
+        data = [NSString stringWithFormat:@"a=%@&async=true&s=%@&i=%@&T=%@", kGOOGLE_READER_USER_STATE_STARRED, entry.feed.rss_url, entry.tag_id, aToken];
+    }
+    [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### STAR ENTRY SUCCESS ###: %@", operation.responseString);
+        if ([delegate respondsToSelector:@selector(starEntrySuccess:)]) {
+            [delegate starEntrySuccess:entry];
+        }
+        // update feeder
+        [self saveAuthValue:aAuthValue andToken:aToken];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### STAR ENTRY ERROR ###: %@",  operation.responseString);
+        [self requestToken:^(NSString *newAuthValue, NSString *newToken){
+            [self starEntry:attempts - 1 entry:entry status:status authValue:newAuthValue token:newToken delegate:delegate];
         }];
     }];
     [operation start];
@@ -350,21 +484,12 @@
     [context save:nil];
 }
 
-- (NSDate *)lastUpdate
+- (NSDate *)beginningTimestamp
 {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    id date = [prefs stringForKey:@"LastUpdate"];
-    if (date == nil || ![date isKindOfClass:[NSDate class]])
-    {
-        return [[NSDate date] dateByAddingTimeInterval: -86400.0];
+    if (_beginningTimestamp == nil) {
+        _beginningTimestamp = [[NSDate date] dateByAddingTimeInterval:-86400];
     }
-    return date;
-}
-
-- (void)setLastUpdate:(NSDate *)date
-{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setObject:date forKey:@"LastUpdate"];
+    return _beginningTimestamp;
 }
 
 @end

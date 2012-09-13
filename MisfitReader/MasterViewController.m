@@ -16,6 +16,7 @@
 
 @interface MasterViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@property (strong, nonatomic) NSDictionary *unreadCountDict;
 @end
 
 @implementation MasterViewController
@@ -35,8 +36,9 @@ UIActivityIndicatorView *activityIndicator = nil;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.title = [RssFeeder instance].email;
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
-
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackToSubscriptions.png"] style:UIBarButtonItemStyleBordered target:nil action:nil];
+    backButtonItem.tintColor = [UIColor darkGrayColor];
+    self.navigationItem.backBarButtonItem = backButtonItem;
     // indicator spinner
     activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
 
@@ -146,60 +148,6 @@ UIActivityIndicatorView *activityIndicator = nil;
     return _fetchedResultsController;
 }    
 
-//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-//{
-//    [self.tableView beginUpdates];
-//}
-//
-//- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-//           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
-//{
-//    switch(type) {
-//        case NSFetchedResultsChangeInsert:
-//            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//            
-//        case NSFetchedResultsChangeDelete:
-//            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//    }
-//}
-//
-//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-//       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-//      newIndexPath:(NSIndexPath *)newIndexPath
-//{
-//    UITableView *tableView = self.tableView;
-//    
-//    switch(type) {
-//        case NSFetchedResultsChangeInsert:
-//            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//            
-//        case NSFetchedResultsChangeDelete:
-//            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//            
-//        case NSFetchedResultsChangeUpdate:
-//            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-//            break;
-//            
-//        case NSFetchedResultsChangeMove:
-//            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//    }
-//}
-
-//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-//{
-//    [self.tableView endUpdates];
-//}
-
-/*
-// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
-*/
-
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     // In the simplest, most efficient, case, reload the table view.
@@ -233,6 +181,7 @@ UIActivityIndicatorView *activityIndicator = nil;
 - (void)subscribeFailure:(NSError *)error
 {
     NSLog(@"*** MasterVIew: SUSCRIBE FAILURE");
+    [activityIndicator stopAnimating];
     [self showUnknownError];
 }
 
@@ -242,7 +191,10 @@ UIActivityIndicatorView *activityIndicator = nil;
     UIBarButtonItem *spinnerBarButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [self.navigationItem setRightBarButtonItem:spinnerBarButton];
     [activityIndicator startAnimating];
-    [[RssFeeder instance] listSubscription:3 delegate:self];
+
+    RssFeeder *feeder = [RssFeeder instance];
+    feeder.beginningTimestamp = [self beginningTimestampToQuery];
+    [feeder listSubscription:3 delegate:self];
 }
 
 int feedingIndex;
@@ -276,12 +228,28 @@ int feedingIndex;
     if (e) NSLog(@"DATA CORE ERROR: %@", e);
 
     [self.tableView reloadData];
+    [[RssFeeder instance] listUnreadCount:3 delegate:self];
+}
+
+- (void)listUnreadCountSuccess:(NSDictionary *)result
+{
+    NSLog(@"*** MasterView: UNREAD COUNT SUCCESS");
+    self.unreadCountDict = result;
 
     // fetch entries for each feed
     if (self.fetchedResultsController.fetchedObjects.count > 0) {
         feedingIndex = 0;
         [self listEntriesAtIndex:feedingIndex];
+    } else {
+        [self updateBeginningTimestampToQuery];
     }
+}
+
+- (void)listUnreadCountFailure:(NSError *)error
+{
+    NSLog(@"*** MasterView: UNREAD COUNT FAILURE");
+    [activityIndicator stopAnimating];
+    [self showUnknownError];
 }
 
 - (void)listSubscriptionFailure:(NSError *)error
@@ -294,7 +262,9 @@ int feedingIndex;
 - (void)listEntriesAtIndex:(int)index
 {
     Feed *feed = [[self.fetchedResultsController fetchedObjects] objectAtIndex:index];
-    [[RssFeeder instance] listEntries:3 feed:feed delegate:self];
+    id object = [self.unreadCountDict objectForKey:feed.rss_url];
+    int unreadCount = object == nil ? 0 : [object integerValue];
+    [[RssFeeder instance] listEntries:3 feed:feed unreadCount:unreadCount delegate:self];
 }
 
 - (void)listEntriesSuccess:(Feed *)feed result:(NSArray *)entries
@@ -338,6 +308,7 @@ int feedingIndex;
     } else {
         [activityIndicator stopAnimating];
         [self.navigationItem setRightBarButtonItem:self.addSubscriptionButton];
+        [self updateBeginningTimestampToQuery];
     }
 }
 
@@ -358,6 +329,28 @@ int feedingIndex;
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Something's wrong. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
+}
+
+NSDate *beginningTimestamp = nil;
+- (NSDate *)beginningTimestampToQuery
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSDate *date = [prefs objectForKey:@"LastUpdate"];
+    if (date == nil || ![date isKindOfClass:[NSDate class]])
+    {
+        date = [[NSDate date] dateByAddingTimeInterval: -86400.0];
+    }
+    NSLog(@"*** MasterView - LAST UPDATE: %@", date);
+    beginningTimestamp = [NSDate date];
+    return date;
+}
+
+- (void)updateBeginningTimestampToQuery
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if (beginningTimestamp != nil) {
+        [prefs setObject:beginningTimestamp forKey:@"LastUpdate"];
+    }
 }
 
 @end

@@ -7,9 +7,13 @@
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Entry" representedClassName="Entry" syncable="YES">
+        <attribute name="is_kept_unread" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="is_read" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="is_starred" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="published_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tag_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="feed" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Feed" inverseName="entries" inverseEntity="Feed" syncable="YES"/>
@@ -23,7 +27,7 @@
     </entity>
     <elements>
         <element name="AccountSetting" positionX="-117" positionY="-9" width="128" height="103"/>
-        <element name="Entry" positionX="-81" positionY="-198" width="128" height="133"/>
+        <element name="Entry" positionX="-81" positionY="-198" width="128" height="195"/>
         <element name="Feed" positionX="-306" positionY="-126" width="128" height="103"/>
     </elements>
 </model>

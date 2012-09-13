@@ -2,7 +2,7 @@
 //  Entry.m
 //  MisfitReader
 //
-//  Created by hoan.nguyen on 8/29/12.
+//  Created by hoan.nguyen on 9/13/12.
 //
 //
 
@@ -12,11 +12,15 @@
 
 @implementation Entry
 
-@dynamic title;
+@dynamic tag_id;
 @dynamic link;
 @dynamic published_at;
-@dynamic updated_at;
 @dynamic summary;
+@dynamic title;
+@dynamic updated_at;
+@dynamic is_read;
+@dynamic is_starred;
+@dynamic is_kept_unread;
 @dynamic feed;
 
 @end

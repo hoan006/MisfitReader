@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Feed.h"
+#import "SummaryViewController.h"
+@class Feed;
 
-@interface DetailViewController : UITableViewController<NSFetchedResultsControllerDelegate>
+@interface DetailViewController : UITableViewController<NSFetchedResultsControllerDelegate, SummaryViewControllerDelegate>
 
 @property (strong, nonatomic) Feed* filteredFeed;
 

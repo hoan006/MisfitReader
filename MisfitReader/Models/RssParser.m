@@ -52,6 +52,31 @@
     return newImage;
 }
 
++ (NSDictionary *)parseUnreadCount:(NSString *)xmlDoc {
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    RXMLElement *rootXML = [RXMLElement elementFromXMLString:xmlDoc encoding:NSUTF8StringEncoding];
+    [rootXML iterate:@"list.object" usingBlock: ^(RXMLElement *objectXML) {
+        NSString *feed_url = nil;
+        int count = 0;
+        for (RXMLElement * element in [objectXML children:@"string"]) {
+            if ([[element attribute:@"name"] isEqualToString:@"id"]) {
+                feed_url = element.text;
+                break;
+            }
+        }
+        for (RXMLElement * element in [objectXML children:@"number"]) {
+            if ([[element attribute:@"name"] isEqualToString:@"count"]) {
+                count = [element.text intValue];
+                break;
+            }
+        }
+        if (feed_url != nil && count > 0) {
+            [result setValue:@(count) forKey:feed_url];
+        }
+    }];
+    return result;
+}
+
 + (NSArray *)parseEntries:(NSString *)xmlDoc
 {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -70,10 +95,35 @@
         }
         if (newEntry.link.length > 0)
         {
+            newEntry.tag_id = [entryXML child:@"id"].text;
             newEntry.title = [entryXML child:@"title"].text;
-            newEntry.published_at = [dateFormatter dateFromString:[entryXML child:@"published"].text];
-            newEntry.updated_at = [dateFormatter dateFromString:[entryXML child:@"updated"].text];
-            newEntry.summary = [entryXML child:@"summary"].text;
+            newEntry.published_at = [[dateFormatter dateFromString:[entryXML child:@"published"].text] timeIntervalSince1970];
+            newEntry.updated_at = [[dateFormatter dateFromString:[entryXML child:@"updated"].text] timeIntervalSince1970];
+
+            NSString *summary = [entryXML child:@"summary"].text;
+            if (summary == nil) {
+                summary = [entryXML child:@"content"].text;
+            }
+            if (summary != nil) {
+                // remove iframe in the html content
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"<iframe.*\\<\\/iframe>" options:0 error:nil];
+
+                summary = [regex stringByReplacingMatchesInString:summary options:0 range:NSMakeRange(0, summary.length) withTemplate:@""];
+            }
+            newEntry.summary = summary;
+
+            newEntry.is_read = newEntry.is_kept_unread = newEntry.is_starred = NO;
+            for (RXMLElement *categoryXML in [entryXML children:@"category"])
+            {
+                if ([[categoryXML attribute:@"label"] isEqualToString:@"read"]) {
+                    newEntry.is_read = YES;
+                } else if ([[categoryXML attribute:@"label"] isEqualToString:@"kept-unread"]) {
+                    newEntry.is_kept_unread = YES;
+                } else if ([[categoryXML attribute:@"label"] isEqualToString:@"starred"]) {
+                    newEntry.is_starred = YES;
+                }
+            }
+
             [result addObject:newEntry];
         }
     }];

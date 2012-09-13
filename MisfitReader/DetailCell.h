@@ -16,4 +16,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *entryTitle;
 @property (weak, nonatomic) IBOutlet UILabel *entrySummary;
 
+@property (strong, nonatomic) IBOutlet UIView *categoryView;
+@property (strong, nonatomic) IBOutlet UIButton *unreadButton;
+@property (strong, nonatomic) IBOutlet UIButton *starredButton;
+
 @end

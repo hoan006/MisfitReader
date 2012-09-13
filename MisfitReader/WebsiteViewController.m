@@ -7,7 +7,6 @@
 //
 
 #import "WebsiteViewController.h"
-#import "Feed.h"
 
 @interface WebsiteViewController ()
 
@@ -30,12 +29,19 @@ UIActivityIndicatorView *activityIndicator;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.navigationItem.title = self.feed.title;
     activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [self.navigationItem setRightBarButtonItem:barButton];
 
-    NSURL *url = [NSURL URLWithString:self.feed.html_url];
+    // set landscape-mode image
+    [self.refreshButton setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonBrowserLoad-landscape.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+    [self.stopButton setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonBrowserLoading-landscape.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+    [self.goBackButton setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonBrowserBack-landscape.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+    [self.goForwardButton setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonBrowserForward-landscape.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+    [self.actionButton setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonAction-landscape.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+
+    // load given URL
+    NSURL *url = [NSURL URLWithString:self.htmlUrl];
     [self.webview loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
@@ -92,6 +98,7 @@ UIActivityIndicatorView *activityIndicator;
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [activityIndicator stopAnimating];
+    self.navigationItem.title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     [self toggleButtons:self.stopButton and:self.refreshButton];
     if (webView.canGoBack) self.goBackButton.enabled = YES;
     if (webView.canGoForward) self.goForwardButton.enabled = YES;

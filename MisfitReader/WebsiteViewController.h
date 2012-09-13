@@ -11,12 +11,13 @@
 
 @interface WebsiteViewController : UIViewController<UIWebViewDelegate>
 
-@property (strong, nonatomic) Feed *feed;
+@property (strong, nonatomic) NSString *htmlUrl;
 @property (weak, nonatomic) IBOutlet UIWebView *webview;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *stopButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *goBackButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *goForwardButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *goBackButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *goForwardButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *actionButton;
 
 - (IBAction)pageRefresh:(id)sender;
 - (IBAction)pageStop:(id)sender;

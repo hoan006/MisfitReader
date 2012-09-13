@@ -7,6 +7,7 @@
 //
 
 #import "DetailCell.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation DetailCell
 
@@ -24,6 +25,13 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    self.categoryView.layer.cornerRadius = 2;
+    self.categoryView.clipsToBounds = YES;
 }
 
 @end

@@ -6,8 +6,9 @@
 //
 //
 
-#import "DetailViewController.h"
+#import "Feed.h"
 #import "Entry.h"
+#import "DetailViewController.h"
 #import "NSString_StrippingHTML.h"
 #import "DetailCell.h"
 #import "SummaryViewController.h"
@@ -19,24 +20,26 @@
 
 @implementation DetailViewController
 
-- (void)awakeFromNib
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.clearsSelectionOnViewWillAppear = NO;
-        self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
-    }
-    [super awakeFromNib];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.navigationItem.title = self.filteredFeed.title;
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackToSubscriptions.png"] style:UIBarButtonItemStyleBordered target:nil action:nil];
+    backButtonItem.tintColor = [UIColor darkGrayColor];
+    self.navigationItem.backBarButtonItem = backButtonItem;
+    
     if (self.filteredFeed) {
+        // draw favicon on the button background
+        UIImage *background = [UIImage imageNamed:@"button.png"];
         UIImage *favicon = [UIImage imageWithData:self.filteredFeed.favicon];
-        self.navigationItem.rightBarButtonItem = [UIBarButtonItem barItemWithImage:favicon target:self action:@selector(showFeedInfo:)];
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem barItemWithImage:favicon backgroundImage:background target:self action:@selector(showFeedInfo:)];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidUnload
@@ -108,10 +111,44 @@
         Entry *entry = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         SummaryViewController *summarylViewController = [segue destinationViewController];
         summarylViewController.entry = entry;
+        summarylViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"showFeedInfo"]) {
         FeedInfoViewController *feedInfoViewController = [segue destinationViewController];
         feedInfoViewController.feed = self.filteredFeed;
     }
+}
+
+NSIndexPath *currentPath = nil;
+- (Entry *)nextEntry
+{
+    if (currentPath == nil) {
+        currentPath = [self.tableView indexPathForSelectedRow];
+    }
+    if (currentPath.row >= [self tableView:self.tableView numberOfRowsInSection:currentPath.section] - 1) {
+        return nil;
+    }
+    NSIndexPath *nextPath = [NSIndexPath indexPathForRow:currentPath.row+1 inSection:currentPath.section];
+    return [self.fetchedResultsController objectAtIndexPath:nextPath];
+}
+
+- (Entry *)previousEntry
+{
+    if (currentPath == nil) {
+        currentPath = [self.tableView indexPathForSelectedRow];
+    }
+    if (currentPath.row <= 0) {
+        return nil;
+    }
+    NSIndexPath *previousPath = [NSIndexPath indexPathForRow:currentPath.row-1 inSection:currentPath.section];
+    return [self.fetchedResultsController objectAtIndexPath:previousPath];
+}
+
+- (void)shiftIndexPathBackOrForward:(BOOL)forward
+{
+    if (currentPath == nil) {
+        currentPath = [self.tableView indexPathForSelectedRow];
+    }
+    currentPath = [NSIndexPath indexPathForRow:currentPath.row + (forward ? 1 : -1) inSection:currentPath.section];
 }
 
 - (NSFetchedResultsController *)fetchedResultsController
@@ -156,65 +193,11 @@
     return _fetchedResultsController;
 }
 
-//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-//{
-//    [self.tableView beginUpdates];
-//}
-//
-//- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-//           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
-//{
-//    switch(type) {
-//        case NSFetchedResultsChangeInsert:
-//            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//
-//        case NSFetchedResultsChangeDelete:
-//            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//    }
-//}
-//
-//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-//       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-//      newIndexPath:(NSIndexPath *)newIndexPath
-//{
-//    UITableView *tableView = self.tableView;
-//
-//    switch(type) {
-//        case NSFetchedResultsChangeInsert:
-//            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//
-//        case NSFetchedResultsChangeDelete:
-//            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//
-//        case NSFetchedResultsChangeUpdate:
-//            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-//            break;
-//
-//        case NSFetchedResultsChangeMove:
-//            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//    }
-//}
-//
-//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-//{
-//    [self.tableView endUpdates];
-//}
-
-
- // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
-
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
  {
      // In the simplest, most efficient, case, reload the table view.
      [self.tableView reloadData];
  }
-
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
@@ -224,25 +207,58 @@
     detailCell.feedTitle.text = entry.feed.title;
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"hh:mm";
-    detailCell.entryTime.text = [dateFormatter stringFromDate:entry.updated_at];
+    detailCell.entryTime.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:entry.updated_at]];
     detailCell.entryTitle.text = entry.title;
-    detailCell.entrySummary.text = [entry.summary stringByStrippingHTML];
 
+    // configure category, title, summary position & height
     CGSize labelSize = [detailCell.entryTitle.text sizeWithFont:detailCell.entryTitle.font];
     CGRect titleFrame = detailCell.entryTitle.frame;
     CGRect summaryFrame = detailCell.entrySummary.frame;
+    CGRect categoryFrame = detailCell.categoryView.frame;
 
     if (labelSize.width > detailCell.entryTitle.frame.size.width) {
         titleFrame.size.height = 40;
         summaryFrame.origin.y = 40;
         summaryFrame.size.height = 20;
+        categoryFrame.origin.y = 42;
     } else {
         titleFrame.size.height = 20;
         summaryFrame.origin.y = 20;
         summaryFrame.size.height = 40;
+        categoryFrame.origin.y = 22;
     }
     detailCell.entryTitle.frame = titleFrame;
     detailCell.entrySummary.frame = summaryFrame;
+
+    // configure category width & show/hide buttons
+    int numberOfVisibleButtons = 0;
+    if (entry.is_kept_unread || !entry.is_read) {
+        numberOfVisibleButtons++;
+        detailCell.unreadButton.hidden = NO;
+    } else {
+        detailCell.unreadButton.hidden = YES;
+    }
+    if (entry.is_starred) {
+        numberOfVisibleButtons++;
+        detailCell.starredButton.hidden = NO;
+    } else {
+        detailCell.starredButton.hidden = YES;
+    }
+
+    categoryFrame.size.width = 16 * numberOfVisibleButtons;
+    detailCell.categoryView.frame = categoryFrame;
+
+    // add padding space for summary text (for category buttons)
+    if (numberOfVisibleButtons > 0) {
+        NSString *paddingSpace = @" ";
+        for (int i = 0; i < numberOfVisibleButtons; i++) {
+            paddingSpace = [paddingSpace stringByAppendingString:@"    "];
+        }
+        detailCell.entrySummary.text = [paddingSpace stringByAppendingString:[entry.summary stringByStrippingHTML]];
+    } else {
+        detailCell.entrySummary.text = [entry.summary stringByStrippingHTML];
+    }
+
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {

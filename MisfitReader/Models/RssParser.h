@@ -10,5 +10,6 @@
 
 @interface RssParser : NSObject
 + (NSArray *)parseFeeds:(NSString *)xmlDoc;
++ (NSDictionary *)parseUnreadCount:(NSString *)xmlDoc;
 + (NSArray *)parseEntries:(NSString *)xmlDoc;
 @end

@@ -2,7 +2,7 @@
 //  Entry.h
 //  MisfitReader
 //
-//  Created by hoan.nguyen on 8/29/12.
+//  Created by hoan.nguyen on 9/13/12.
 //
 //
 
@@ -13,11 +13,15 @@
 
 @interface Entry : NSManagedObject
 
-@property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSString * tag_id;
 @property (nonatomic, retain) NSString * link;
-@property (nonatomic, retain) NSDate * published_at;
-@property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic) NSTimeInterval published_at;
 @property (nonatomic, retain) NSString * summary;
+@property (nonatomic, retain) NSString * title;
+@property (nonatomic) NSTimeInterval updated_at;
+@property (nonatomic) BOOL is_read;
+@property (nonatomic) BOOL is_starred;
+@property (nonatomic) BOOL is_kept_unread;
 @property (nonatomic, retain) Feed *feed;
 
 @end

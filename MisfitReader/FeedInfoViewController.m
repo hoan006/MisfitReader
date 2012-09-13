@@ -31,6 +31,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    backButtonItem.tintColor = [UIColor darkGrayColor];
+    self.navigationItem.backBarButtonItem = backButtonItem;
+
+
     self.openWebPageCell.imageView.image = [UIImage imageWithData:self.feed.favicon];
     self.openWebPageCell.textLabel.text = self.feed.title;
     NSURL *feedURL = [NSURL URLWithString:self.feed.html_url];
@@ -127,7 +133,7 @@
 {
     if ([segue.identifier isEqualToString:@"showWebsite"]) {
         WebsiteViewController *websiteViewController = [segue destinationViewController];
-        websiteViewController.feed = self.feed;
+        websiteViewController.htmlUrl = self.feed.html_url;
     }
 }
 

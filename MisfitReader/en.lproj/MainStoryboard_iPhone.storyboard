@@ -13,7 +13,7 @@
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4" customClass="DefaultNavigationBar">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="iwH-Ne-nq0">
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="iwH-Ne-nq0" customClass="DefaultToobar">
                         <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
@@ -78,6 +78,7 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="User's Email" id="36">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="AfC-lE-ngv">
+                            <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                             <connections>
                                 <action selector="openSubscriptionView:" destination="12" id="OBY-Qy-1I6"/>
                             </connections>
@@ -138,13 +139,35 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.95294117647058818" green="0.94901960784313721" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
                                 <dataDetectorType key="dataDetectorTypes"/>
+                                <connections>
+                                    <outlet property="delegate" destination="5ZM-Sd-HXz" id="5br-qi-19E"/>
+                                </connections>
                             </webView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="j9a-6Z-4bJ">
+                                <rect key="frame" x="1" y="40" width="320" height="80"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="boldSystem" size="button"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="touchDownHiddenButton:" destination="5ZM-Sd-HXz" eventType="touchDown" id="k3z-o2-VJM"/>
+                                    <action selector="touchUpInsideHiddenButton:" destination="5ZM-Sd-HXz" eventType="touchUpInside" id="lqu-Sc-JU1"/>
+                                    <action selector="touchUpOutsideHiddenButton:" destination="5ZM-Sd-HXz" eventType="touchUpOutside" id="6pm-gL-wAk"/>
+                                </connections>
+                            </button>
                             <view alpha="0.94999999999999996" contentMode="scaleToFill" id="OXD-ER-OLL">
                                 <rect key="frame" x="0.0" y="420" width="320" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iXf-cM-cFU">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="iXf-cM-cFU">
                                         <rect key="frame" x="8" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -155,8 +178,11 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="touchUpInsideReadButton:" destination="5ZM-Sd-HXz" eventType="touchUpInside" id="X2t-kM-PDB"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rGV-kA-1Yu">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="rGV-kA-1Yu">
                                         <rect key="frame" x="292" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -168,19 +194,21 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vmp-e7-Kuv">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="vmp-e7-Kuv">
                                         <rect key="frame" x="150" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="ButtonNext.png">
                                             <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="touchUpInsideNextButton:" destination="5ZM-Sd-HXz" eventType="touchUpInside" id="fRG-9U-DBM"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5pu-Yj-2qO">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="5pu-Yj-2qO">
                                         <rect key="frame" x="224" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -191,8 +219,11 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="touchUpInsidePreviousButton:" destination="5ZM-Sd-HXz" eventType="touchUpInside" id="ta4-tw-NrX"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="g6B-Ks-46P">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="g6B-Ks-46P">
                                         <rect key="frame" x="79" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -203,6 +234,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="touchUpInsideStarButton:" destination="5ZM-Sd-HXz" eventType="touchUpInside" id="PDz-1t-ikb"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.95294117647058818" green="0.94901960784313721" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
@@ -211,7 +245,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="COH-Rv-gFh">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="COH-Rv-gFh">
                                         <rect key="frame" x="8" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -226,7 +260,7 @@
                                             <action selector="goBack:" destination="5ZM-Sd-HXz" eventType="touchUpInside" id="1aj-Ug-VeY"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xsa-07-rbQ">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="xsa-07-rbQ">
                                         <rect key="frame" x="292" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -238,7 +272,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="p9C-Id-VgB">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="p9C-Id-VgB">
                                         <rect key="frame" x="150" y="10" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -263,7 +297,13 @@
                     <connections>
                         <outlet property="bottomBar" destination="OXD-ER-OLL" id="7zQ-hi-9Ql"/>
                         <outlet property="contentWebView" destination="hzj-2p-zrU" id="rk1-6u-Vxl"/>
+                        <outlet property="hiddenButton" destination="j9a-6Z-4bJ" id="7bt-ex-WDE"/>
+                        <outlet property="nextButton" destination="vmp-e7-Kuv" id="eLu-Im-Gpi"/>
+                        <outlet property="previousButton" destination="5pu-Yj-2qO" id="QRB-jR-n6z"/>
+                        <outlet property="readButton" destination="iXf-cM-cFU" id="Gye-q9-RIX"/>
+                        <outlet property="starButton" destination="g6B-Ks-46P" id="DgL-CS-lIk"/>
                         <outlet property="topBar" destination="8hD-U4-D3M" id="kea-n6-ezb"/>
+                        <segue destination="U3l-qc-n5V" kind="push" identifier="showEntry" id="HUa-SO-saw"/>
                     </connections>
                 </viewController>
             </objects>
@@ -278,12 +318,13 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" id="Owk-z4-0NT">
+                            <navigationBar contentMode="scaleToFill" id="Owk-z4-0NT" customClass="DefaultNavigationBar">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Add Subscription" id="Ex2-kd-ddC">
                                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="cOW-sA-CXH">
+                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
                                                 <action selector="closeView:" destination="SCY-EL-S3A" id="cTy-e5-43A"/>
                                             </connections>
@@ -317,7 +358,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.92549019607843142" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <toolbarItems/>
                     <connections>
@@ -480,7 +521,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="372"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" id="zSU-Hk-nSt">
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="zSU-Hk-nSt">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="372"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -492,36 +533,38 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <toolbarItems>
-                        <barButtonItem style="plain" systemItem="refresh" id="Zde-fv-vFZ">
+                        <barButtonItem image="ButtonBrowserLoad.png" style="plain" id="Zde-fv-vFZ">
                             <connections>
                                 <action selector="pageRefresh:" destination="U3l-qc-n5V" id="XuU-mh-SxS"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="stop" id="MmU-wA-q0Q">
+                        <barButtonItem image="ButtonBrowserLoading.png" style="plain" id="MmU-wA-q0Q">
                             <connections>
                                 <action selector="pageStop:" destination="U3l-qc-n5V" id="2Ke-Fa-YSF"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Qsc-R2-YRf"/>
-                        <barButtonItem enabled="NO" title="◄" style="plain" id="6BZ-WM-3bp">
+                        <barButtonItem enabled="NO" image="ButtonBrowserBack.png" style="plain" id="6BZ-WM-3bp">
                             <connections>
                                 <action selector="pageGoBack:" destination="U3l-qc-n5V" id="98p-rd-u45"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="XzN-44-SaX"/>
-                        <barButtonItem enabled="NO" title="❖" style="plain" id="LHf-2X-EjF"/>
+                        <barButtonItem enabled="NO" image="ButtonReadability.png" style="plain" id="LHf-2X-EjF"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="qBv-mI-7sk"/>
-                        <barButtonItem enabled="NO" title="►" style="plain" id="Zfl-Ib-53e">
+                        <barButtonItem enabled="NO" image="ButtonBrowserForward.png" style="plain" id="Zfl-Ib-53e">
                             <connections>
                                 <action selector="pageGoForward:" destination="U3l-qc-n5V" id="VKB-Hd-l8K"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Z56-Sx-p8y"/>
-                        <barButtonItem style="plain" systemItem="action" id="zzt-rC-G2w"/>
+                        <barButtonItem image="ButtonAction.png" style="plain" id="zzt-rC-G2w"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="Nlb-sT-5CV"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="actionButton" destination="zzt-rC-G2w" id="uRZ-jU-OKJ"/>
                         <outlet property="goBackButton" destination="6BZ-WM-3bp" id="4bN-oB-5Nd"/>
                         <outlet property="goForwardButton" destination="Zfl-Ib-53e" id="CIO-ZN-FQp"/>
                         <outlet property="refreshButton" destination="Zde-fv-vFZ" id="QH6-2n-EFQ"/>
@@ -535,6 +578,10 @@
     </scenes>
     <resources>
         <image name="ButtonAction.png" width="24" height="24"/>
+        <image name="ButtonBrowserBack.png" width="24" height="24"/>
+        <image name="ButtonBrowserForward.png" width="24" height="24"/>
+        <image name="ButtonBrowserLoad.png" width="24" height="24"/>
+        <image name="ButtonBrowserLoading.png" width="24" height="24"/>
         <image name="ButtonFonts.png" width="26" height="26"/>
         <image name="ButtonNavBack.png" width="20" height="20"/>
         <image name="ButtonNext.png" width="24" height="24"/>
@@ -550,8 +597,6 @@
                 <relationship kind="action" name="addTapped:"/>
                 <relationship kind="action" name="closeView:"/>
                 <relationship kind="action" name="feedInputDidEnd:"/>
-                <relationship kind="outlet" name="addButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="feedInput" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
             </relationships>
         </class>
@@ -561,14 +606,20 @@
         <class className="DefaultNavigationController" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DefaultNavigationController.h"/>
         </class>
+        <class className="DefaultToobar" superclassName="UIToolbar">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DefaultToobar.h"/>
+        </class>
         <class className="DetailCell" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DetailCell.h"/>
             <relationships>
+                <relationship kind="outlet" name="categoryView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="entrySummary" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="entryTime" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="entryTitle" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="feedIcon" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="feedTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="starredButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="unreadButton" candidateClass="UIButton"/>
             </relationships>
         </class>
         <class className="DetailViewController" superclassName="UITableViewController">
@@ -597,12 +648,28 @@
                 <relationship kind="outlet" name="addSubscriptionButton" candidateClass="UIBarButtonItem"/>
             </relationships>
         </class>
+        <class className="PopupView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PopupView.h"/>
+        </class>
         <class className="SummaryViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SummaryViewController.h"/>
             <relationships>
                 <relationship kind="action" name="goBack:"/>
+                <relationship kind="action" name="touchDownHiddenButton:"/>
+                <relationship kind="action" name="touchUpInsideHiddenButton:"/>
+                <relationship kind="action" name="touchUpInsideNextButton:"/>
+                <relationship kind="action" name="touchUpInsidePreviousButton:"/>
+                <relationship kind="action" name="touchUpInsideReadButton:"/>
+                <relationship kind="action" name="touchUpInsideStarButton:"/>
+                <relationship kind="action" name="touchUpOutsideHiddenButton:"/>
                 <relationship kind="outlet" name="bottomBar" candidateClass="UIView"/>
                 <relationship kind="outlet" name="contentWebView" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="hiddenButton" candidateClass="UIView"/>
+                <relationship kind="outlet" name="nextButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="popupView" candidateClass="PopupView"/>
+                <relationship kind="outlet" name="previousButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="readButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="starButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="topBar" candidateClass="UIView"/>
             </relationships>
         </class>
@@ -613,6 +680,7 @@
                 <relationship kind="action" name="pageGoForward:"/>
                 <relationship kind="action" name="pageRefresh:"/>
                 <relationship kind="action" name="pageStop:"/>
+                <relationship kind="outlet" name="actionButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="goBackButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="goForwardButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="refreshButton" candidateClass="UIBarButtonItem"/>
@@ -626,4 +694,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="HUa-SO-saw"/>
+    </inferredMetricsTieBreakers>
 </document>
