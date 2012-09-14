@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "AddSubscriptionViewController.h"
+#import "AccountViewController.h"
 #import "RssFeeder.h"
 
 @class DetailViewController;
 
 #import <CoreData/CoreData.h>
 
-@interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate, AddSubscriptionDelegate, RssFeederDelegate>
+@interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate, AddSubscriptionDelegate, RssFeederDelegate, AccountViewControllerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
@@ -22,6 +23,8 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *addSubscriptionButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+
 - (IBAction)openSubscriptionView:(id)sender;
 - (IBAction)updateSubscriptionList:(id)sender;
 

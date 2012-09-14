@@ -33,7 +33,7 @@
     [super viewDidLoad];
 
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStyleBordered target:nil action:nil];
-    backButtonItem.tintColor = [UIColor darkGrayColor];
+    backButtonItem.tintColor = [UIColor scrollViewTexturedBackgroundColor];
     self.navigationItem.backBarButtonItem = backButtonItem;
 
 

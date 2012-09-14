@@ -37,11 +37,25 @@ UIActivityIndicatorView *activityIndicator = nil;
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.title = [RssFeeder instance].email;
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackToSubscriptions.png"] style:UIBarButtonItemStyleBordered target:nil action:nil];
-    backButtonItem.tintColor = [UIColor darkGrayColor];
+    backButtonItem.tintColor = [UIColor scrollViewTexturedBackgroundColor];
     self.navigationItem.backBarButtonItem = backButtonItem;
     // indicator spinner
     activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
 
+    if ([RssFeeder instance].email != nil)
+    {
+        [self updateSubscriptionList:nil];
+    } else {
+        [self.navigationItem setRightBarButtonItem:nil];
+        self.refreshButton.enabled = NO;
+        [self performSegueWithIdentifier:@"editAccount" sender:nil];
+    }
+}
+
+- (void)authenticateSuccess
+{
+    [[RssFeeder instance] loadFromCoreData];
+    self.navigationItem.title = [RssFeeder instance].email;
     [self updateSubscriptionList:nil];
 }
 
@@ -106,6 +120,8 @@ UIActivityIndicatorView *activityIndicator = nil;
     }
     else if ([[segue identifier] isEqualToString:@"openSubscription"]) {
         ((AddSubscriptionViewController *)[segue destinationViewController]).delegate = self;
+    } else if ([[segue identifier] isEqualToString:@"editAccount"]) {
+        ((AccountViewController *)[segue destinationViewController]).delegate = self;
     }
 }
 
@@ -191,6 +207,7 @@ UIActivityIndicatorView *activityIndicator = nil;
     UIBarButtonItem *spinnerBarButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [self.navigationItem setRightBarButtonItem:spinnerBarButton];
     [activityIndicator startAnimating];
+    self.refreshButton.enabled = NO;
 
     RssFeeder *feeder = [RssFeeder instance];
     feeder.beginningTimestamp = [self beginningTimestampToQuery];
@@ -241,6 +258,8 @@ int feedingIndex;
         feedingIndex = 0;
         [self listEntriesAtIndex:feedingIndex];
     } else {
+        [activityIndicator stopAnimating];
+        self.refreshButton.enabled = YES;
         [self updateBeginningTimestampToQuery];
     }
 }
@@ -256,6 +275,7 @@ int feedingIndex;
 {
     NSLog(@"*** MasterView: UPDATE SUBSCRIPTION LIST FAILURE");
     [activityIndicator stopAnimating];
+    self.refreshButton.enabled = YES;
     [self showUnknownError];
 }
 
@@ -302,21 +322,15 @@ int feedingIndex;
     [self.managedObjectContext save:&e];
     if (e) NSLog(@"DATA CORE ERROR: %@", e);
 
-    [self updateEntriesCount:[feed.entries count]];
+    [self.tableView reloadData];
     if (++feedingIndex < [self.fetchedResultsController fetchedObjects].count) {
         [self listEntriesAtIndex:feedingIndex];
     } else {
         [activityIndicator stopAnimating];
+        self.refreshButton.enabled = YES;
         [self.navigationItem setRightBarButtonItem:self.addSubscriptionButton];
         [self updateBeginningTimestampToQuery];
     }
-}
-
-- (void)updateEntriesCount:(int)count
-{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:feedingIndex inSection:0];
-    MasterCell *cell = (MasterCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", count];
 }
 
 - (void)listEntriesFailure:(Feed *)feed error:(NSError *)error

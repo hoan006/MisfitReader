@@ -5,11 +5,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1498"/>
     </dependencies>
     <scenes>
-        <!--Default Navigation Controller-->
+        <!--Navigation Controller-->
         <scene sceneID="11">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="10" sceneMemberID="firstResponder"/>
-                <navigationController toolbarHidden="NO" id="3" customClass="DefaultNavigationController" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="3" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4" customClass="DefaultNavigationBar">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -22,7 +22,7 @@
                     </connections>
                 </navigationController>
             </objects>
-            <point key="canvasLocation" x="-1" y="64"/>
+            <point key="canvasLocation" x="11" y="64"/>
         </scene>
         <!--Master View Controller - Master-->
         <scene sceneID="18">
@@ -70,13 +70,19 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
-                        <barButtonItem systemItem="refresh" id="ylg-MN-kRS">
+                        <barButtonItem image="ButtonBrowserLoad.png" style="plain" id="ylg-MN-kRS">
                             <connections>
                                 <action selector="updateSubscriptionList:" destination="12" id="hbK-TU-o5H"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="User's Email" id="36">
+                        <barButtonItem key="leftBarButtonItem" title="Account" id="qTf-CE-eA0">
+                            <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                            <connections>
+                                <segue destination="0gG-vR-7S9" kind="push" identifier="editAccount" id="GhY-Qw-fsZ"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="AfC-lE-ngv">
                             <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                             <connections>
@@ -86,6 +92,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addSubscriptionButton" destination="AfC-lE-ngv" id="SL2-pl-eao"/>
+                        <outlet property="refreshButton" destination="ylg-MN-kRS" id="05a-J0-6x5"/>
                         <segue destination="SCY-EL-S3A" kind="modal" identifier="openSubscription" id="2dh-2r-ES9"/>
                     </connections>
                 </tableViewController>
@@ -309,6 +316,103 @@
             </objects>
             <point key="canvasLocation" x="1341" y="64"/>
         </scene>
+        <!--Account View Controller - Google Account-->
+        <scene sceneID="yy3-wq-Lx0">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QW8-hC-zxR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="0gG-vR-7S9" customClass="AccountViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="37D-U3-unm">
+                        <rect key="frame" x="0.0" y="64" width="320" height="372"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.92549019607843142" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                        <sections>
+                            <tableViewSection id="ioH-Ln-a1A">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="username" id="BYo-s9-cAr">
+                                        <rect key="frame" x="0.0" y="10" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="aFR-ht-rsF">
+                                                    <rect key="frame" x="20" y="11" width="70" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="einherjar006@gmail.com" minimumFontSize="17" clearButtonMode="whileEditing" id="sha-6R-4do">
+                                                    <rect key="frame" x="98" y="6" width="190" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="0gG-vR-7S9" id="79W-Fi-SqU"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="password" id="nji-g2-JCQ">
+                                        <rect key="frame" x="0.0" y="55" width="320" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="DJ7-L8-dhk">
+                                                    <rect key="frame" x="20" y="11" width="70" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="26111995" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" id="bIY-4B-iEa">
+                                                    <rect key="frame" x="98" y="6" width="190" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="0gG-vR-7S9" id="oSQ-Qj-MHC"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="0gG-vR-7S9" id="n4f-gj-Bzd"/>
+                            <outlet property="delegate" destination="0gG-vR-7S9" id="qqu-jR-rrh"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Google Account" id="yf1-Nx-Mgy">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="dBh-lF-Udd">
+                            <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                            <connections>
+                                <action selector="touchCancel:" destination="0gG-vR-7S9" id="bVo-mY-Ud3"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="eD1-i8-67q">
+                            <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                            <connections>
+                                <action selector="touchDone:" destination="0gG-vR-7S9" id="6Ax-tP-wFg"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButtonItem" destination="eD1-i8-67q" id="0Yl-c9-mDZ"/>
+                        <outlet property="passwordField" destination="bIY-4B-iEa" id="NUB-Yd-IUv"/>
+                        <outlet property="usernameField" destination="sha-6R-4do" id="aC8-0i-lJh"/>
+                    </connections>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="11" y="652"/>
+        </scene>
         <!--Add Subscription View Controller-->
         <scene sceneID="c8b-Xv-HQP">
             <objects>
@@ -324,7 +428,7 @@
                                 <items>
                                     <navigationItem title="Add Subscription" id="Ex2-kd-ddC">
                                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="cOW-sA-CXH">
-                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                             <connections>
                                                 <action selector="closeView:" destination="SCY-EL-S3A" id="cTy-e5-43A"/>
                                             </connections>
@@ -378,7 +482,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="cFC-mG-g3b">
                         <rect key="frame" x="0.0" y="64" width="320" height="372"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.92549019607843142" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
                             <tableViewSection id="bIz-dQ-OcA">
                                 <cells>
@@ -591,20 +695,29 @@
         <image name="ButtonStarred.png" width="24" height="24"/>
     </resources>
     <classes>
+        <class className="AccountViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AccountViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="touchCancel:"/>
+                <relationship kind="action" name="touchDone:"/>
+                <relationship kind="outlet" name="doneButtonItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
         <class className="AddSubscriptionViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/AddSubscriptionViewController.h"/>
             <relationships>
                 <relationship kind="action" name="addTapped:"/>
                 <relationship kind="action" name="closeView:"/>
                 <relationship kind="action" name="feedInputDidEnd:"/>
+                <relationship kind="outlet" name="addButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="feedInput" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
             </relationships>
         </class>
         <class className="DefaultNavigationBar" superclassName="UINavigationBar">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DefaultNavigationBar.h"/>
-        </class>
-        <class className="DefaultNavigationController" superclassName="UINavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DefaultNavigationController.h"/>
         </class>
         <class className="DefaultToobar" superclassName="UIToolbar">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DefaultToobar.h"/>
@@ -646,6 +759,7 @@
                 <relationship kind="action" name="openSubscriptionView:"/>
                 <relationship kind="action" name="updateSubscriptionList:"/>
                 <relationship kind="outlet" name="addSubscriptionButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="refreshButton" candidateClass="UIBarButtonItem"/>
             </relationships>
         </class>
         <class className="PopupView" superclassName="UIView">
@@ -695,6 +809,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="HUa-SO-saw"/>
+        <segue reference="cDy-UD-h8p"/>
     </inferredMetricsTieBreakers>
 </document>

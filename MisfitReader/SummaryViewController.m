@@ -56,7 +56,7 @@ bool interceptLinks;
     context = [appDelegate managedObjectContext];
 
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackToSubscriptions.png"] style:UIBarButtonItemStyleBordered target:nil action:nil];
-    backButtonItem.tintColor = [UIColor darkGrayColor];
+    backButtonItem.tintColor = [UIColor scrollViewTexturedBackgroundColor];
     self.navigationItem.backBarButtonItem = backButtonItem;
 
     // additional positioning when being pushed from landscape mode

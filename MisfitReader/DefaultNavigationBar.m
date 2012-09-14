@@ -7,6 +7,7 @@
 //
 
 #import "DefaultNavigationBar.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation DefaultNavigationBar
 
@@ -43,6 +44,12 @@
 
     CGColorSpaceRelease(colorSpace);
     CGContextRestoreGState(context);
+
+    self.layer.shadowColor = [[UIColor lightGrayColor] CGColor];
+    self.layer.shadowOffset = CGSizeMake(1.0, 2.0);
+    self.layer.shadowOpacity = 1.0;
+    self.layer.masksToBounds = NO;
+    self.layer.shouldRasterize = YES;
 }
 
 @end

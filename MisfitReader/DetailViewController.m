@@ -25,7 +25,7 @@
     [super viewDidLoad];
     self.navigationItem.title = self.filteredFeed.title;
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackToSubscriptions.png"] style:UIBarButtonItemStyleBordered target:nil action:nil];
-    backButtonItem.tintColor = [UIColor darkGrayColor];
+    backButtonItem.tintColor = [UIColor scrollViewTexturedBackgroundColor];
     self.navigationItem.backBarButtonItem = backButtonItem;
     
     if (self.filteredFeed) {

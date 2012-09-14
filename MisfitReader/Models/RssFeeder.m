@@ -29,10 +29,16 @@
     return instance;
 }
 
-- (void)authenticateEmail:(void (^)(NSString *))followup {
+
+- (void)authenticateEmail:(void (^)(NSString *))success failure:(void (^)())failure{
+    [self authenticateEmail:self.email password:self.password success:success failure:failure];
+}
+
+- (void)authenticateEmail:(NSString *)aEmail password:(NSString *)aPassword success:(void (^)(NSString *))success failure:(void (^)())failure
+{
     NSURL *url = [NSURL URLWithString:kGOOGLE_CLIENT_LOGIN];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    NSString *data = [NSString stringWithFormat:@"accountType=GOOGLE&Email=%@&Passwd=%@&service=reader", self.email, self.password];
+    NSString *data = [NSString stringWithFormat:@"accountType=GOOGLE&Email=%@&Passwd=%@&service=reader", aEmail, aPassword];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
@@ -43,11 +49,14 @@
         NSTextCheckingResult *match = [regex firstMatchInString:str options:0 range:NSMakeRange(0, [str length])];
         NSString *newAuthValue = [str substringWithRange:[match rangeAtIndex:1]];
         NSLog(@"### AUTH VALUE ###: %@", newAuthValue);
-        if (followup) {
-            followup(newAuthValue);
+        if (success) {
+            success(newAuthValue);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"### AUTH ERROR ###: %@",  operation.responseString);
+        if (failure) {
+            failure();
+        }
     }];
     [operation start];
 }
@@ -75,7 +84,7 @@
         NSLog(@"### TOKEN ERROR ###");
         [self authenticateEmail:^(NSString *newAuthValue){
             [self requestToken:followup authValue:newAuthValue];
-        }];
+        } failure:nil];
     }];
     [operation start];
 }
@@ -117,6 +126,10 @@
         NSLog(@"### FEED ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
             [self listSubscription:attempts -1 authValue:authValue delegate:delegate];
+        } failure:^{
+            if ([delegate respondsToSelector:@selector(listSubscriptionFailure:)]) {
+                [delegate listSubscriptionFailure:nil];
+            }
         }];
     }];
     [operation start];
@@ -157,6 +170,10 @@
         NSLog(@"### UNREAD COUNT ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
             [self listUnreadCount:attempts -1 authValue:authValue delegate:delegate];
+        } failure:^{
+            if ([delegate respondsToSelector:@selector(listUnreadCountFailure:)]) {
+                [delegate listUnreadCountFailure:nil];
+            }
         }];
     }];
     [operation start];
@@ -315,6 +332,10 @@
                 NSLog(@"### LIST ENTRIES REDIRECT ###");
                 [self authenticateEmail:^(NSString *authValue){
                     [self listEntries:attempts -1 feed:feed unreadCount:unreadCount authValue:authValue delegate:delegate];
+                } failure:^{
+                    if ([delegate respondsToSelector:@selector(listEntriesFailure:error:)]) {
+                        [delegate listEntriesFailure:feed error:nil];
+                    }
                 }];
             } else {
                 NSLog(@"### LIST ENTRIES SUCCESS ### ");
@@ -332,6 +353,10 @@
         NSLog(@"### LIST ENTRIES ERROR ###: %@",  operation.responseString);
         [self authenticateEmail:^(NSString *authValue){
             [self listEntries:attempts -1 feed:feed unreadCount:unreadCount authValue:authValue delegate:delegate];
+        } failure:^{
+            if ([delegate respondsToSelector:@selector(listEntriesFailure:error:)]) {
+                [delegate listEntriesFailure:feed error:nil];
+            }
         }];
     }];
     [operation start];
@@ -429,7 +454,7 @@
     [operation start];
 }
 
-- (void)loadFromCoreData
+- (BOOL)loadFromCoreData
 {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = [appDelegate managedObjectContext];
@@ -447,11 +472,9 @@
         self.password = account.password;
         self.authValue = account.google_auth;
         self.token = account.google_token;
-    } else {
-        self.email = @"einherjar006@gmail.com";
-        self.password = @"26111995";
-        self.authValue = self.token = @"";
+        return YES;
     }
+    return NO;
 }
 
 - (void)saveAuthValue:(NSString *)aAuthValue andToken:(NSString *)aToken

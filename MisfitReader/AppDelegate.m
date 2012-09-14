@@ -56,6 +56,7 @@
     MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
     controller.managedObjectContext = self.managedObjectContext;
 
+    // round 4 corners
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     UIImage *overlayImg = [self createOverlayImage:appFrame radius:5.0];
     CALayer *overlay = [CALayer layer];

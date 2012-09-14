@@ -42,8 +42,8 @@
 @property (strong, nonatomic) NSDate *beginningTimestamp;
 
 + (RssFeeder *)instance;
-- (void)authenticateEmail:(void (^)(NSString *))followup;
-- (void)requestToken:(void (^)(NSString *, NSString *))followup;
+- (BOOL)loadFromCoreData;
+- (void)authenticateEmail:(NSString *)aEmail password:(NSString *)aPassword success:(void (^)(NSString *))success failure:(void (^)())failure;
 - (void)listSubscription:(int)attempts delegate:(id<RssFeederDelegate>)delegate;
 - (void)listUnreadCount:(int)attempts delegate:(id<RssFeederDelegate>)delegate;
 - (void)subscribe:(int)attempts url:(NSString *)feedURL delegate:(id<RssFeederDelegate>)delegate;
