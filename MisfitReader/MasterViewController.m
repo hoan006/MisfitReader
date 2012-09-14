@@ -39,6 +39,7 @@ UIActivityIndicatorView *activityIndicator = nil;
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackToSubscriptions.png"] style:UIBarButtonItemStyleBordered target:nil action:nil];
     backButtonItem.tintColor = [UIColor scrollViewTexturedBackgroundColor];
     self.navigationItem.backBarButtonItem = backButtonItem;
+    [self.refreshButton setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonBrowserLoad-landscape.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
     // indicator spinner
     activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
 
@@ -52,11 +53,24 @@ UIActivityIndicatorView *activityIndicator = nil;
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.tableView reloadData];
+}
+
 - (void)authenticateSuccess
 {
     [[RssFeeder instance] loadFromCoreData];
-    self.navigationItem.title = [RssFeeder instance].email;
-    [self updateSubscriptionList:nil];
+    [self viewDidLoad];
+}
+
+- (void)removeAccountDone
+{
+    [[RssFeeder instance] loadFromCoreData];
+    self.navigationItem.title = nil;
+    [self.navigationItem setRightBarButtonItem:nil];
+    self.refreshButton.enabled = NO;
 }
 
 - (void)viewDidUnload
@@ -175,7 +189,13 @@ UIActivityIndicatorView *activityIndicator = nil;
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.imageView.image = [UIImage imageWithData:[object valueForKey:@"favicon"]];
     cell.textLabel.text = [[object valueForKey:@"title"] description];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [(NSSet *)[object valueForKey:@"entries"] count]];
+    int count = 0;
+    for (Entry *entry in [object valueForKey:@"entries"]) {
+        if (entry.is_kept_unread || !entry.is_read) {
+            count++;
+        }
+    }
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", count];
 }
 
 - (IBAction)openSubscriptionView:(id)sender

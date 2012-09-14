@@ -124,8 +124,17 @@
                             <outlet property="delegate" destination="NQB-5k-g2F" id="e4q-LD-nCi"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem image="ButtonReadAll.png" style="plain" id="udN-0I-OET">
+                            <connections>
+                                <action selector="touchReadAll:" destination="NQB-5k-g2F" id="PH9-GE-KVj"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Feed Title" id="KPc-r2-4pd"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="readAllButtonItem" destination="udN-0I-OET" id="hda-0V-BcO"/>
                         <segue destination="5ZM-Sd-HXz" kind="push" identifier="showSummary" id="Bwv-Qb-1vK"/>
                         <segue destination="P5S-hy-wFs" kind="push" identifier="showFeedInfo" id="ThX-t3-hoQ"/>
                     </connections>
@@ -342,7 +351,7 @@
                                                     <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="einherjar006@gmail.com" minimumFontSize="17" clearButtonMode="whileEditing" id="sha-6R-4do">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="sha-6R-4do">
                                                     <rect key="frame" x="98" y="6" width="190" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
@@ -369,7 +378,7 @@
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="26111995" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" id="bIY-4B-iEa">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" id="bIY-4B-iEa">
                                                     <rect key="frame" x="98" y="6" width="190" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
@@ -384,6 +393,36 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection id="GuK-aP-hL8">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="removeAccount" id="Urn-BX-9h4">
+                                        <rect key="frame" x="0.0" y="120" width="320" height="46"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="NqD-Mb-I2o">
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <state key="normal" title="Remove Account">
+                                                        <color key="titleColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="removeAccount:" destination="0gG-vR-7S9" eventType="touchUpInside" id="C84-5v-moj"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="0gG-vR-7S9" id="n4f-gj-Bzd"/>
@@ -391,12 +430,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Google Account" id="yf1-Nx-Mgy">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="dBh-lF-Udd">
-                            <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                            <connections>
-                                <action selector="touchCancel:" destination="0gG-vR-7S9" id="bVo-mY-Ud3"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Done" id="eD1-i8-67q">
                             <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                             <connections>
@@ -407,6 +440,7 @@
                     <connections>
                         <outlet property="doneButtonItem" destination="eD1-i8-67q" id="0Yl-c9-mDZ"/>
                         <outlet property="passwordField" destination="bIY-4B-iEa" id="NUB-Yd-IUv"/>
+                        <outlet property="removeAccountCell" destination="Urn-BX-9h4" id="mzp-o1-iJ7"/>
                         <outlet property="usernameField" destination="sha-6R-4do" id="aC8-0i-lJh"/>
                     </connections>
                 </tableViewController>
@@ -691,6 +725,7 @@
         <image name="ButtonNext.png" width="24" height="24"/>
         <image name="ButtonPrevious.png" width="24" height="24"/>
         <image name="ButtonRead.png" width="24" height="24"/>
+        <image name="ButtonReadAll.png" width="20" height="20"/>
         <image name="ButtonReadability.png" width="24" height="24"/>
         <image name="ButtonStarred.png" width="24" height="24"/>
     </resources>
@@ -698,10 +733,11 @@
         <class className="AccountViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/AccountViewController.h"/>
             <relationships>
-                <relationship kind="action" name="touchCancel:"/>
+                <relationship kind="action" name="removeAccount:"/>
                 <relationship kind="action" name="touchDone:"/>
                 <relationship kind="outlet" name="doneButtonItem" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="removeAccountCell" candidateClass="UITableViewCell"/>
                 <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
             </relationships>
         </class>
@@ -739,6 +775,8 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DetailViewController.h"/>
             <relationships>
                 <relationship kind="action" name="showFeedInfo:"/>
+                <relationship kind="action" name="touchReadAll:"/>
+                <relationship kind="outlet" name="readAllButtonItem" candidateClass="UIBarButtonItem"/>
             </relationships>
         </class>
         <class className="FeedInfoViewController" superclassName="UITableViewController">

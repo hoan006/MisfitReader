@@ -9,10 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @protocol AccountViewControllerDelegate
-
-@optional
 - (void)authenticateSuccess;
-
+- (void)removeAccountDone;
 @end
 
 @interface AccountViewController : UITableViewController<UITextFieldDelegate>
@@ -20,10 +18,11 @@
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *doneButtonItem;
+@property (strong, nonatomic) IBOutlet UITableViewCell *removeAccountCell;
 
 @property (weak, nonatomic) id<AccountViewControllerDelegate> delegate;
 
-- (IBAction)touchCancel:(id)sender;
 - (IBAction)touchDone:(id)sender;
+- (IBAction)removeAccount:(id)sender;
 
 @end

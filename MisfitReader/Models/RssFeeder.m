@@ -454,6 +454,46 @@
     [operation start];
 }
 
+- (void)markAllAsRead:(int)attempts feed:(Feed *)feed delegate:(id<RssFeederDelegate>)delegate
+{
+    [self markAllAsRead:attempts feed:feed authValue:self.authValue token:self.token delegate:delegate];
+}
+
+- (void)markAllAsRead:(int)attempts feed:(Feed *)feed authValue:(NSString *)aAuthValue token:(NSString *)aToken delegate:(id<RssFeederDelegate>)delegate
+{
+    if (attempts <= 0) {
+        //TODO: Detect useful error
+        if ([delegate respondsToSelector:@selector(markAllAsReadFailure:error:)]) {
+            [delegate markAllAsReadFailure:feed error:nil];
+        }
+        return;
+    }
+    NSURL *url = [NSURL URLWithString:kGOOGLE_READER_MARK_ALL_AS_READ];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:kCURL_USER_AGENT forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"GoogleLogin auth=%@", aAuthValue] forHTTPHeaderField:@"Authorization"];
+    NSString *data = [NSString stringWithFormat:@"s=%@&ts=%@&T=%@", feed.rss_url, @((int)(double)[[NSDate date] timeIntervalSince1970]), aToken];
+    [request setHTTPBody:[data dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"### MARK ALL AS READ SUCCESS ###: %@", operation.responseString);
+        if ([delegate respondsToSelector:@selector(markAllAsReadSuccess:)]) {
+            [delegate markAllAsReadSuccess:feed];
+        }
+        // update feeder
+        [self saveAuthValue:aAuthValue andToken:aToken];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"### MARK ALL AS READ ERROR ###: %@",  operation.responseString);
+        [self requestToken:^(NSString *newAuthValue, NSString *newToken){
+            [self markAllAsRead:attempts - 1 feed:feed authValue:newAuthValue token:newToken delegate:delegate];
+        }];
+    }];
+    [operation start];
+}
+
 - (BOOL)loadFromCoreData
 {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -473,6 +513,8 @@
         self.authValue = account.google_auth;
         self.token = account.google_token;
         return YES;
+    } else {
+        self.email = self.password = self.authValue = self.token = nil;
     }
     return NO;
 }

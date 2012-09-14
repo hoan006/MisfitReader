@@ -29,7 +29,8 @@
 - (void)readEntryFailure:(Entry *)entry error:(NSError *)error;
 - (void)starEntrySuccess:(Entry *)entry;
 - (void)starEntryFailure:(Entry *)entry error:(NSError *)error;
-
+- (void)markAllAsReadSuccess:(Feed *)feed;
+- (void)markAllAsReadFailure:(Feed *)feed error:(NSError *)error;
 
 @end
 
@@ -52,4 +53,5 @@
 - (void)listEntries:(int)attempts feed:(Feed *)feed unreadCount:(int)unreadCount delegate:(id<RssFeederDelegate>)delegate;
 - (void)readEntry:(int)attempts entry:(Entry *)entry status:(BOOL)status delegate:(id<RssFeederDelegate>)delegate;
 - (void)starEntry:(int)attempts entry:(Entry *)entry status:(BOOL)status delegate:(id<RssFeederDelegate>)delegate;
+- (void)markAllAsRead:(int)attempts feed:(Feed *)feed delegate:(id<RssFeederDelegate>)delegate;
 @end

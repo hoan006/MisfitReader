@@ -14,6 +14,8 @@
 #import "SummaryViewController.h"
 #import "UIBarButtonItem_ImageButton.h"
 #import "FeedInfoViewController.h"
+#import "BlockAlertView.h"
+#import "RssFeeder.h"
 
 @interface DetailViewController ()
 @end
@@ -34,6 +36,8 @@
         UIImage *favicon = [UIImage imageWithData:self.filteredFeed.favicon];
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem barItemWithImage:favicon backgroundImage:background target:self action:@selector(showFeedInfo:)];
     }
+
+    [self.readAllButtonItem setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonReadAll-landscape.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -267,6 +271,34 @@ NSIndexPath *currentPath = nil;
 
 - (IBAction)showFeedInfo:(id)sender {
     [self performSegueWithIdentifier:@"showFeedInfo" sender:self];
+}
+
+- (IBAction)touchReadAll:(id)sender {
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:nil message:@"Mark all as read?"];
+    [alert setCancelButtonWithTitle:@"No" block:nil];
+    [alert addButtonWithTitle:@"Yes" block:^{
+        for (Entry *entry in self.filteredFeed.entries) {
+            entry.is_kept_unread = NO;
+            entry.is_read = YES;
+        }
+        [self.managedObjectContext save:nil];
+        [[RssFeeder instance] markAllAsRead:3 feed:self.filteredFeed delegate:self];
+    }];
+    [alert show];
+}
+
+- (void)markAllAsReadSuccess:(Feed *)feed
+{
+    NSLog(@"*** DETAIL VIEW - Mark All As Read Success");
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)markAllAsReadFailure:(Feed *)feed error:(NSError *)error
+{
+    NSLog(@"*** DETAIL VIEW - Mark All As Read Failure");
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:nil message:@"Something's wrong. Please try again later."];
+    [alert setCancelButtonWithTitle:@"No" block:nil];
+    [alert show];
 }
 
 @end

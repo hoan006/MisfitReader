@@ -44,6 +44,11 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.removeAccountCell.hidden = [RssFeeder instance].email == nil;
+    if ([RssFeeder instance].email == nil)
+    {
+        [self.navigationItem setHidesBackButton:YES animated:NO];
+    }
 }
 
 - (void)viewDidUnload
@@ -65,11 +70,6 @@
         [self touchDone:nil];
     }
     return YES;
-}
-
-- (IBAction)touchCancel:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 UIActivityIndicatorView *activityIndicator;
@@ -125,6 +125,45 @@ UIActivityIndicatorView *activityIndicator;
         account.password = password;
     }
     [context save:nil];
+}
+
+- (IBAction)removeAccount:(id)sender
+{
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Warning"
+                                                   message:@"Remove account will delete all of MisfitReader's data. Are you sure to proceed?"];
+    [alert setDestructiveButtonWithTitle:@"Proceed" block:^{
+        [self deleteAllData];
+        self.usernameField.text = self.passwordField.text = @"";
+        self.removeAccountCell.hidden = YES;
+    }];
+    [alert setCancelButtonWithTitle:@"Nevermind" block:nil];
+    [alert show];
+}
+
+- (void)deleteAllData
+{
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    NSManagedObjectContext *context = appDelegate.managedObjectContext;
+    [self deleteAllObjects:@"Feed" inContext:context];
+    [self deleteAllObjects:@"AccountSetting" inContext:context];
+    [self.delegate removeAccountDone];
+}
+
+- (void)deleteAllObjects:(NSString *) entityDescription inContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityDescription inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+
+    NSError *error;
+    NSArray *items = [context executeFetchRequest:fetchRequest error:&error];
+
+
+    for (NSManagedObject *managedObject in items) {
+        [context deleteObject:managedObject];
+    }
+    if (![context save:&error]) {
+        NSLog(@"Error deleting %@ - error:%@",entityDescription,error);
+    }
 }
 
 @end

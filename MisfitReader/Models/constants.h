@@ -15,6 +15,7 @@
 #define kGOOGLE_READER_SUBSCRIBE @"http://www.google.com/reader/api/0/subscription/quickadd"
 #define kGOOGLE_READER_EDIT @"http://www.google.com/reader/api/0/subscription/edit"
 #define kGOOGLE_READER_SET_TAG @"http://www.google.com/reader/api/0/edit-tag"
+#define kGOOGLE_READER_MARK_ALL_AS_READ @"http://www.google.com/reader/api/0/mark-all-as-read"
 #define kGOOGLE_READER_UNREAD_ENTRIES_FROM_FEED_URL_AND_TIMESTAMP @"http://www.google.com/reader/atom/%@?n=1000&r=o&ot=%@&xt=user/-/state/com.google/read"
 #define kGOOGLE_READER_UNREAD_ENTRIES_FROM_FEED_URL_AND_COUNT @"http://www.google.com/reader/atom/%@?n=%@"
 

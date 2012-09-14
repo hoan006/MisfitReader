@@ -99,6 +99,8 @@
 		FC7156A01601B5A7007152EB /* Unread.png in Resources */ = {isa = PBXBuildFile; fileRef = FC71569E1601B5A7007152EB /* Unread.png */; };
 		FC7156AC16021FB6007152EB /* PopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7156AB16021FB6007152EB /* PopupView.m */; };
 		FC7156B01602EB11007152EB /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7156AF1602EB11007152EB /* AccountViewController.m */; };
+		FC7156BD1603858E007152EB /* ButtonReadAll-landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = FC7156BB1603858E007152EB /* ButtonReadAll-landscape.png */; };
+		FC7156BE1603858E007152EB /* ButtonReadAll.png in Resources */ = {isa = PBXBuildFile; fileRef = FC7156BC1603858E007152EB /* ButtonReadAll.png */; };
 		FC7A20A315F0A70600F5D23B /* RssParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FC7A20A215F0A70600F5D23B /* RssParser.m */; };
 		FCA28ADC15F4A379003F20BB /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28ADB15F4A379003F20BB /* Feed.m */; };
 		FCA28AE215F5B305003F20BB /* MasterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AE115F5B305003F20BB /* MasterCell.m */; };
@@ -245,6 +247,8 @@
 		FC7156AD160228F8007152EB /* UIImage_NegativeImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIImage_NegativeImage.h; sourceTree = "<group>"; };
 		FC7156AE1602EB10007152EB /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
 		FC7156AF1602EB11007152EB /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
+		FC7156BB1603858E007152EB /* ButtonReadAll-landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonReadAll-landscape.png"; sourceTree = "<group>"; };
+		FC7156BC1603858E007152EB /* ButtonReadAll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonReadAll.png; sourceTree = "<group>"; };
 		FC7A20A115F0A70600F5D23B /* RssParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RssParser.h; sourceTree = "<group>"; };
 		FC7A20A215F0A70600F5D23B /* RssParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RssParser.m; sourceTree = "<group>"; };
 		FC8EBC1816004E95007741A6 /* NSDate_PrettyPrint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSDate_PrettyPrint.h; sourceTree = "<group>"; };
@@ -298,6 +302,8 @@
 		FC0EA6ED15FD87AE002F81A5 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				FC7156BB1603858E007152EB /* ButtonReadAll-landscape.png */,
+				FC7156BC1603858E007152EB /* ButtonReadAll.png */,
 				FC71569D1601B5A7007152EB /* Starred.png */,
 				FC71569E1601B5A7007152EB /* Unread.png */,
 				FC71567C1600A559007152EB /* ButtonAction-landscape.png */,
@@ -687,6 +693,8 @@
 				FC71568D1600A559007152EB /* ButtonBrowserLoading.png in Resources */,
 				FC71569F1601B5A7007152EB /* Starred.png in Resources */,
 				FC7156A01601B5A7007152EB /* Unread.png in Resources */,
+				FC7156BD1603858E007152EB /* ButtonReadAll-landscape.png in Resources */,
+				FC7156BE1603858E007152EB /* ButtonReadAll.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
