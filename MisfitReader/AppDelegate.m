@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-
 #import "MasterViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation AppDelegate
 
@@ -16,12 +16,54 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+- (UIImage *)createOverlayImage:(CGRect)rect radius:(float)radius
+{
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
+
+    CGContextMoveToPoint(context, 0, 0);
+    CGContextAddLineToPoint(context, 0, radius);
+    CGContextAddArcToPoint(context, 0, 0, radius * 2, 0, radius);
+    CGContextAddLineToPoint(context, 0, 0);
+
+    CGContextMoveToPoint(context, rect.size.width, 0);
+    CGContextAddLineToPoint(context, rect.size.width, radius);
+    CGContextAddArcToPoint(context, rect.size.width, 0, rect.size.width - radius * 2, 0, radius);
+    CGContextAddLineToPoint(context, rect.size.width, 0);
+
+    CGContextMoveToPoint(context, 0, rect.size.height);
+    CGContextAddLineToPoint(context, 0, rect.size.height - radius);
+    CGContextAddArcToPoint(context, 0, rect.size.height, radius * 2, rect.size.height, radius);
+    CGContextAddLineToPoint(context, 0, rect.size.height);
+
+    CGContextMoveToPoint(context, rect.size.width, rect.size.height);
+    CGContextAddLineToPoint(context, rect.size.width, rect.size.height - radius);
+    CGContextAddArcToPoint(context, rect.size.width, rect.size.height, rect.size.width - radius * 2, rect.size.height, radius);
+    CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
+
+    CGContextFillPath(context);
+    // Get the image, here setting the UIImageView image
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    // Lets forget about that we were drawing
+    UIGraphicsEndImageContext();
+    return result;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
     controller.managedObjectContext = self.managedObjectContext;
 
+    CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+    UIImage *overlayImg = [self createOverlayImage:appFrame radius:5.0];
+    CALayer *overlay = [CALayer layer];
+    overlay.frame = appFrame;
+    overlay.contents = (id)overlayImg.CGImage;
+    overlay.zPosition = 1;
+    [self.window.layer addSublayer:overlay];
+    
     return YES;
 }
 
