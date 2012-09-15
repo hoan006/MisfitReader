@@ -54,11 +54,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
+    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - Table View
@@ -116,6 +112,7 @@
         SummaryViewController *summarylViewController = [segue destinationViewController];
         summarylViewController.entry = entry;
         summarylViewController.delegate = self;
+        currentPath = [self.tableView indexPathForSelectedRow];
     } else if ([segue.identifier isEqualToString:@"showFeedInfo"]) {
         FeedInfoViewController *feedInfoViewController = [segue destinationViewController];
         feedInfoViewController.feed = self.filteredFeed;
@@ -125,9 +122,6 @@
 NSIndexPath *currentPath = nil;
 - (Entry *)nextEntry
 {
-    if (currentPath == nil) {
-        currentPath = [self.tableView indexPathForSelectedRow];
-    }
     if (currentPath.row >= [self tableView:self.tableView numberOfRowsInSection:currentPath.section] - 1) {
         return nil;
     }
@@ -137,9 +131,6 @@ NSIndexPath *currentPath = nil;
 
 - (Entry *)previousEntry
 {
-    if (currentPath == nil) {
-        currentPath = [self.tableView indexPathForSelectedRow];
-    }
     if (currentPath.row <= 0) {
         return nil;
     }
@@ -149,9 +140,6 @@ NSIndexPath *currentPath = nil;
 
 - (void)shiftIndexPathBackOrForward:(BOOL)forward
 {
-    if (currentPath == nil) {
-        currentPath = [self.tableView indexPathForSelectedRow];
-    }
     currentPath = [NSIndexPath indexPathForRow:currentPath.row + (forward ? 1 : -1) inSection:currentPath.section];
 }
 
@@ -273,15 +261,20 @@ NSIndexPath *currentPath = nil;
     [self performSegueWithIdentifier:@"showFeedInfo" sender:self];
 }
 
+NSMutableArray *keptUnreadEntries;
+int keptUnreadIndex;
 - (IBAction)touchReadAll:(id)sender {
     BlockAlertView *alert = [BlockAlertView alertWithTitle:nil message:@"Mark all as read?"];
     [alert setCancelButtonWithTitle:@"No" block:nil];
     [alert addButtonWithTitle:@"Yes" block:^{
+        keptUnreadEntries = [[NSMutableArray alloc] init];
         for (Entry *entry in self.filteredFeed.entries) {
-            entry.is_kept_unread = NO;
+            if (entry.is_kept_unread) {
+                [keptUnreadEntries addObject:entry];
+                entry.is_kept_unread = NO;
+            }
             entry.is_read = YES;
         }
-        [self.managedObjectContext save:nil];
         [[RssFeeder instance] markAllAsRead:3 feed:self.filteredFeed delegate:self];
     }];
     [alert show];
@@ -290,12 +283,41 @@ NSIndexPath *currentPath = nil;
 - (void)markAllAsReadSuccess:(Feed *)feed
 {
     NSLog(@"*** DETAIL VIEW - Mark All As Read Success");
+    [self.managedObjectContext save:nil];
+
     [self.navigationController popViewControllerAnimated:YES];
+
+    // remove kept-unread tag on each "kept-unread" entry
+    if ([keptUnreadEntries count] > 0) {
+        keptUnreadIndex = 0;
+        [self removeKeptUnreadFromOneEntry];
+    }
+}
+
+- (void)removeKeptUnreadFromOneEntry
+{
+    if (keptUnreadIndex < [keptUnreadEntries count])
+    {
+        [[RssFeeder instance] readEntry:3 entry:[keptUnreadEntries objectAtIndex:keptUnreadIndex] status:YES delegate:self];
+        keptUnreadIndex++;
+    }
+}
+
+- (void)readEntrySuccess:(Entry *)entry
+{
+    [self removeKeptUnreadFromOneEntry];
+}
+
+- (void)readEntryFailure:(Entry *)entry error:(NSError *)error
+{
+    [self removeKeptUnreadFromOneEntry];
 }
 
 - (void)markAllAsReadFailure:(Feed *)feed error:(NSError *)error
 {
     NSLog(@"*** DETAIL VIEW - Mark All As Read Failure");
+    [self.managedObjectContext rollback];
+
     BlockAlertView *alert = [BlockAlertView alertWithTitle:nil message:@"Something's wrong. Please try again later."];
     [alert setCancelButtonWithTitle:@"No" block:nil];
     [alert show];

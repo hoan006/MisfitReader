@@ -109,6 +109,7 @@
 		FCA28AF815F738DB003F20BB /* SummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AF715F738DA003F20BB /* SummaryViewController.m */; };
 		FCA28B0015F75D63003F20BB /* FeedInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28AFF15F75D62003F20BB /* FeedInfoViewController.m */; };
 		FCA28B4C15F85234003F20BB /* WebsiteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA28B4B15F85233003F20BB /* WebsiteViewController.m */; };
+		FCF3131E1604CDC500DCB95A /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FCF3131D1604CDC500DCB95A /* icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -268,6 +269,7 @@
 		FCA28AFF15F75D62003F20BB /* FeedInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedInfoViewController.m; sourceTree = "<group>"; };
 		FCA28B4A15F85233003F20BB /* WebsiteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebsiteViewController.h; sourceTree = "<group>"; };
 		FCA28B4B15F85233003F20BB /* WebsiteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebsiteViewController.m; sourceTree = "<group>"; };
+		FCF3131D1604CDC500DCB95A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -302,6 +304,7 @@
 		FC0EA6ED15FD87AE002F81A5 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				FCF3131D1604CDC500DCB95A /* icon.png */,
 				FC7156BB1603858E007152EB /* ButtonReadAll-landscape.png */,
 				FC7156BC1603858E007152EB /* ButtonReadAll.png */,
 				FC71569D1601B5A7007152EB /* Starred.png */,
@@ -695,6 +698,7 @@
 				FC7156A01601B5A7007152EB /* Unread.png in Resources */,
 				FC7156BD1603858E007152EB /* ButtonReadAll-landscape.png in Resources */,
 				FC7156BE1603858E007152EB /* ButtonReadAll.png in Resources */,
+				FCF3131E1604CDC500DCB95A /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

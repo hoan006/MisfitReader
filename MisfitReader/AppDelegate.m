@@ -50,22 +50,37 @@
     return result;
 }
 
+CALayer *overlay = nil;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
     controller.managedObjectContext = self.managedObjectContext;
+    [self setOverlayLayer];
 
+    return YES;
+}
+
+- (void)application:(UIApplication *)application didChangeStatusBarOrientation:(UIInterfaceOrientation)oldStatusBarOrientation
+{
+    BOOL hidden = UIInterfaceOrientationIsPortrait(oldStatusBarOrientation);
+    [[UIApplication sharedApplication] setStatusBarHidden:hidden withAnimation:UIStatusBarAnimationNone];
+    [self setOverlayLayer];
+}
+
+- (void)setOverlayLayer
+{
     // round 4 corners
+    if (overlay) {
+        [overlay removeFromSuperlayer];
+    }
     CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
     UIImage *overlayImg = [self createOverlayImage:appFrame radius:5.0];
-    CALayer *overlay = [CALayer layer];
+    overlay = [CALayer layer];
     overlay.frame = appFrame;
     overlay.contents = (id)overlayImg.CGImage;
     overlay.zPosition = 1;
     [self.window.layer addSublayer:overlay];
-    
-    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

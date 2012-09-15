@@ -81,11 +81,7 @@ UIActivityIndicatorView *activityIndicator = nil;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
+    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark - Table View
@@ -195,7 +191,7 @@ UIActivityIndicatorView *activityIndicator = nil;
             count++;
         }
     }
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", count];
+    cell.detailTextLabel.text = count > 0 ? [NSString stringWithFormat:@"%d", count] : nil;
 }
 
 - (IBAction)openSubscriptionView:(id)sender
@@ -280,6 +276,7 @@ int feedingIndex;
     } else {
         [activityIndicator stopAnimating];
         self.refreshButton.enabled = YES;
+        [self.navigationItem setRightBarButtonItem:self.addSubscriptionButton];
         [self updateBeginningTimestampToQuery];
     }
 }

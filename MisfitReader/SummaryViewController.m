@@ -59,19 +59,19 @@ bool interceptLinks;
     backButtonItem.tintColor = [UIColor scrollViewTexturedBackgroundColor];
     self.navigationItem.backBarButtonItem = backButtonItem;
 
-    // additional positioning when being pushed from landscape mode
-    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
-        CGRect topFrame = self.topBar.frame;
-        CGRect bottomFrame = self.bottomBar.frame;
-        topFrame.size = bottomFrame.size = self.navigationController.navigationBar.frame.size;
-        bottomFrame.origin.y = [UIApplication currentSize].width - bottomFrame.size.height;
-        self.topBar.frame = topFrame;
-        self.bottomBar.frame = bottomFrame;
-    }
-
     // configure webview
     self.contentWebView.scrollView.bounces = NO;
     self.contentWebView.scrollView.delegate = self;
+}
+
+- (void)positionToolbarsAndContent
+{
+    CGRect topFrame = self.topBar.frame;
+    CGRect bottomFrame = self.bottomBar.frame;
+    topFrame.size = bottomFrame.size = self.navigationController.navigationBar.frame.size;
+    bottomFrame.origin.y = [UIApplication currentSize].height - bottomFrame.size.height;
+    self.topBar.frame = topFrame;
+    self.bottomBar.frame = bottomFrame;
 
     // update entry feed to 'read' & configure buttom buttons
     [self displayReadEntryAndConfigBottomButtons];
@@ -123,13 +123,7 @@ Entry *nextEntry, *previousEntry;
     self.contentWebView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, self.bottomBar.frame.size.height, 0);
     interceptLinks = NO;
     [self.contentWebView loadHTMLString:[self contentHTML] baseURL:nil];
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    BOOL show = (toInterfaceOrientation == UIInterfaceOrientationPortrait ||
-                 toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown);
-    [[UIApplication sharedApplication] setStatusBarHidden:!show withAnimation:UIStatusBarAnimationNone];
+    [self updateHiddenButtonPosition:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -139,6 +133,7 @@ Entry *nextEntry, *previousEntry;
     else {
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:animated];
     }
+    [self positionToolbarsAndContent];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
@@ -186,7 +181,7 @@ Entry *nextEntry, *previousEntry;
 - (void)updateHiddenButtonPosition:(UIScrollView *)scrollView
 {
     CGRect frame = self.hiddenButton.frame;
-    frame.origin.y = self.topBar.frame.size.height - scrollView.contentOffset.y;
+    frame.origin.y = self.topBar.frame.size.height - (scrollView != nil ? scrollView.contentOffset.y : 0);
     self.hiddenButton.frame = frame;
 }
 
@@ -268,6 +263,7 @@ static const NSString * kWebViewFontFamily = @"helvetica";
     [self.contentWebView loadHTMLString:[self contentHTML] baseURL:nil];
 
     [self configureBottomBarButtons];
+    [self updateHiddenButtonPosition:self.contentWebView.scrollView];
 }
 
 - (IBAction)touchUpInsideReadButton:(id)sender

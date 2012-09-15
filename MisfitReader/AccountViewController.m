@@ -48,6 +48,9 @@
     if ([RssFeeder instance].email == nil)
     {
         [self.navigationItem setHidesBackButton:YES animated:NO];
+    } else {
+        self.usernameField.text = [RssFeeder instance].email;
+        self.passwordField.text = [RssFeeder instance].password;
     }
 }
 
@@ -135,6 +138,7 @@ UIActivityIndicatorView *activityIndicator;
         [self deleteAllData];
         self.usernameField.text = self.passwordField.text = @"";
         self.removeAccountCell.hidden = YES;
+        self.navigationItem.hidesBackButton = YES;
     }];
     [alert setCancelButtonWithTitle:@"Nevermind" block:nil];
     [alert show];
