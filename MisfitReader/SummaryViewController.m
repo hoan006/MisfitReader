@@ -15,6 +15,7 @@
 #import "constants.h"
 #import "AppDelegate.h"
 #import "PopupView.h"
+#import "TrapezoidView.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface SummaryViewController ()
@@ -48,7 +49,10 @@
 }
 
 NSManagedObjectContext *context;
-bool interceptLinks;
+BOOL interceptLinks;
+TrapezoidView *trapezoid;
+BOOL inTransition;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -58,22 +62,15 @@ bool interceptLinks;
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackToSubscriptions.png"] style:UIBarButtonItemStyleBordered target:nil action:nil];
     backButtonItem.tintColor = [UIColor scrollViewTexturedBackgroundColor];
     self.navigationItem.backBarButtonItem = backButtonItem;
-
-    // configure webview
-    self.contentWebView.scrollView.bounces = NO;
     self.contentWebView.scrollView.delegate = self;
+
+    trapezoid = [[[NSBundle mainBundle] loadNibNamed:@"TrapezoidView" owner:self options:nil] objectAtIndex:0];
+    trapezoid.hidden = YES;
+    [self.view addSubview:trapezoid];
 }
 
-- (void)positionToolbarsAndContent
-{
-    CGRect topFrame = self.topBar.frame;
-    CGRect bottomFrame = self.bottomBar.frame;
-    topFrame.size = bottomFrame.size = self.navigationController.navigationBar.frame.size;
-    bottomFrame.origin.y = [UIApplication currentSize].height - bottomFrame.size.height;
-    self.topBar.frame = topFrame;
-    self.bottomBar.frame = bottomFrame;
-
-    // update entry feed to 'read' & configure buttom buttons
+- (void)viewDidAppear:(BOOL)animated {
+    [self resizeToolbars];
     [self displayReadEntryAndConfigBottomButtons];
 }
 
@@ -108,40 +105,40 @@ Entry *nextEntry, *previousEntry;
 // handle resizing "custom" toolbars
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    CGRect topFrame = self.topBar.frame;
-    CGRect bottomFrame = self.bottomBar.frame;
-
-    topFrame.size = bottomFrame.size = self.navigationController.navigationBar.frame.size;
-    bottomFrame.origin.y = [UIApplication currentSize].height - bottomFrame.size.height;
-
     [UIView animateWithDuration:duration animations:^{
-        self.topBar.frame = topFrame;
-        self.bottomBar.frame = bottomFrame;
+        [self resizeToolbars];
     }];
-
-    // update web view
-    self.contentWebView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, self.bottomBar.frame.size.height, 0);
-    interceptLinks = NO;
-    [self.contentWebView loadHTMLString:[self contentHTML] baseURL:nil];
-    [self updateHiddenButtonPosition:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated];
-    }
-    else {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:animated];
-    }
-    [self positionToolbarsAndContent];
+- (void)resizeToolbars
+{
+    CGRect topFrame = self.topBar.frame;
+    CGRect bottomFrame = self.bottomBar.frame;
+    topFrame.size = bottomFrame.size = self.navigationController.navigationBar.frame.size;
+    bottomFrame.origin.y = [UIApplication currentSize].height - bottomFrame.size.height;
+    self.topBar.frame = topFrame;
+    self.bottomBar.frame = bottomFrame;
+    self.contentWebView.scrollView.contentInset = UIEdgeInsetsMake(topFrame.size.height, 0, bottomFrame.size.height, 0);
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self resizeToolbars];
+    [self displayReadEntryAndConfigBottomButtons];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    inTransition = NO;
+    self.contentWebView.scrollView.bounces = YES;
+    
+    // update hidden button height
     NSString * jsResult = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementById('splitter').offsetTop"];
     CGRect frame = self.hiddenButton.frame;
-    frame.size.height = [jsResult intValue] - self.topBar.frame.size.height;
+    frame.size.height = [jsResult intValue];
     self.hiddenButton.frame = frame;
+    [self updateHiddenButtonPosition];
+    self.hiddenButton.hidden = NO;
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -151,8 +148,8 @@ Entry *nextEntry, *previousEntry;
         [self performSegueWithIdentifier:@"showEntry" sender:nil];
         return NO;
     }
-    //No need to intercept the initial request to fill the WebView
     else {
+        self.hiddenButton.hidden = YES;
         interceptLinks = TRUE;
         return YES;
     }
@@ -167,21 +164,89 @@ Entry *nextEntry, *previousEntry;
 {
     if (!decelerate)
     {
-        [self updateHiddenButtonPosition:scrollView];
+        [self updateHiddenButtonPosition];
         self.hiddenButton.hidden = NO;
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    [self updateHiddenButtonPosition:scrollView];
+    [self updateHiddenButtonPosition];
     self.hiddenButton.hidden = NO;
 }
 
-- (void)updateHiddenButtonPosition:(UIScrollView *)scrollView
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    // reveal next entry?
+    if (scrollView.contentOffset.y > 0)
+    {
+        float height = scrollView.contentOffset.y + [UIApplication currentSize].height - scrollView.contentSize.height - scrollView.contentInset.bottom;
+        if (height > 0 && !inTransition && nextEntry != nil)
+        {
+            CGRect frame = trapezoid.frame;
+            frame.size.height = height;
+            frame.origin.y = self.bottomBar.frame.origin.y - height;
+            trapezoid.frame = frame;
+            trapezoid.titleLabel.text = nextEntry.title;
+            trapezoid.feedLabel.text = nextEntry.feed.title;
+            trapezoid.alignTop = YES;
+            trapezoid.hidden = NO;
+        } else {
+            trapezoid.hidden = YES;
+        }
+    }
+    // reveal previous entry?
+    else {
+        float height = scrollView.contentOffset.y + scrollView.contentInset.top;
+        if (height < 0 && !inTransition && previousEntry != nil)
+        {
+            CGRect frame = trapezoid.frame;
+            frame.size.height = -height;
+            frame.origin.y = self.topBar.frame.size.height;
+            trapezoid.frame = frame;
+            trapezoid.titleLabel.text = previousEntry.title;
+            trapezoid.feedLabel.text = previousEntry.feed.title;
+            trapezoid.alignTop = NO;
+            trapezoid.hidden = NO;
+        } else {
+            trapezoid.hidden = YES;
+        }
+
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    // go to next entry?
+    if (scrollView.contentOffset.y > 0)
+    {
+        float height = scrollView.contentOffset.y + [UIApplication currentSize].height - scrollView.contentSize.height - scrollView.contentInset.bottom;
+        if (height > 80 && nextEntry != nil)
+        {
+            trapezoid.hidden = YES;
+            inTransition = YES;
+            self.contentWebView.scrollView.bounces = NO;
+            [self touchUpInsideNextButton:nil];
+        }
+    }
+    // go to previous entry?
+    else {
+        float height = scrollView.contentOffset.y + scrollView.contentInset.top;
+        if (height < -80 && previousEntry != nil)
+        {
+            trapezoid.hidden = YES;
+            inTransition = YES;
+            self.contentWebView.scrollView.bounces = NO;
+            [self touchUpInsidePreviousButton:nil];
+        }
+    }
+}
+
+- (void)updateHiddenButtonPosition
+{
+    UIScrollView *scrollView = self.contentWebView.scrollView;
     CGRect frame = self.hiddenButton.frame;
-    frame.origin.y = self.topBar.frame.size.height - (scrollView != nil ? scrollView.contentOffset.y : 0);
+    frame.origin.y = scrollView != nil ? -scrollView.contentOffset.y : 0;
     self.hiddenButton.frame = frame;
 }
 
@@ -222,7 +287,7 @@ static const NSString * kWebViewFontFamily = @"helvetica";
     NSString *displayDate = [[NSDate dateWithTimeIntervalSince1970:self.entry.updated_at] prettyFormatWithTime];
     int imgMaxWidth = [UIApplication currentSize].width - 16;
     int fontSize = 17;
-    
+
     NSString *result = [NSString stringWithFormat:@"<html> \n"
             "<head> \n"
             "<style type=\"text/css\"> \n"
@@ -231,11 +296,9 @@ static const NSString * kWebViewFontFamily = @"helvetica";
             "#title {font-weight: bold;} \n"
             "#sub {font-size: %dpx; color: #A5A5A5} \n"
             "img {max-width: %dpx; height: auto;} \n"
-            "#padding-space {min-height:%dpx; clear:both;} \n"
             "</style> \n"
             "</head> \n"
             "<body> \n"
-            "<div id='padding-space'></div> \n"
             "<div id='header'> \n"
             "  <div id='sub'>%@</div> \n"
             "  <div id='title'>%@</div> \n"
@@ -243,9 +306,8 @@ static const NSString * kWebViewFontFamily = @"helvetica";
             "</div> \n"
             "<hr id='splitter'/> \n"
             "<div id='content'>%@</div> \n"
-            "<div id='padding-space'></div> \n"
             "</html>",
-            kWebViewFontFamily, fontSize, fontSize - 3, imgMaxWidth, (int)self.topBar.frame.size.height,
+            kWebViewFontFamily, fontSize, fontSize - 3, imgMaxWidth,
             displayDate, self.entry.title, self.entry.feed.title, self.entry.summary];
     return result;
 }
@@ -263,7 +325,6 @@ static const NSString * kWebViewFontFamily = @"helvetica";
     [self.contentWebView loadHTMLString:[self contentHTML] baseURL:nil];
 
     [self configureBottomBarButtons];
-    [self updateHiddenButtonPosition:self.contentWebView.scrollView];
 }
 
 - (IBAction)touchUpInsideReadButton:(id)sender
@@ -302,7 +363,7 @@ static const NSString * kWebViewFontFamily = @"helvetica";
     CATransition *transition = [CATransition animation];
     transition.duration = 0.3;
     transition.type = kCATransitionPush;
-    transition.subtype = kCATransitionFromBottom;
+    transition.subtype = kCATransitionFromTop;
     [self.contentWebView.layer addAnimation:transition forKey:nil];
 
     [self displayReadEntryAndConfigBottomButtons];
@@ -316,7 +377,7 @@ static const NSString * kWebViewFontFamily = @"helvetica";
     CATransition *transition = [CATransition animation];
     transition.duration = 0.3;
     transition.type = kCATransitionPush;
-    transition.subtype = kCATransitionFromTop;
+    transition.subtype = kCATransitionFromBottom;
     [self.contentWebView.layer addAnimation:transition forKey:nil];
 
     [self displayReadEntryAndConfigBottomButtons];

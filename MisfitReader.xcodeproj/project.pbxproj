@@ -13,6 +13,8 @@
 		FC0EA6F915FDA57C002F81A5 /* noise.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA6F715FDA57C002F81A5 /* noise.png */; };
 		FC0EA70115FDCAD4002F81A5 /* SliderReadability.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA70015FDCAD4002F81A5 /* SliderReadability.png */; };
 		FC0EA70315FDCB52002F81A5 /* ButtonFonts.png in Resources */ = {isa = PBXBuildFile; fileRef = FC0EA70215FDCB52002F81A5 /* ButtonFonts.png */; };
+		FC23343A160860B300C491BE /* TrapezoidView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC233438160860B300C491BE /* TrapezoidView.m */; };
+		FC23343B160860B300C491BE /* TrapezoidView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC233439160860B300C491BE /* TrapezoidView.xib */; };
 		FC38488915EDC62800BA315F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488815EDC62800BA315F /* UIKit.framework */; };
 		FC38488B15EDC62800BA315F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488A15EDC62800BA315F /* Foundation.framework */; };
 		FC38488D15EDC62800BA315F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC38488C15EDC62800BA315F /* CoreGraphics.framework */; };
@@ -21,7 +23,6 @@
 		FC38489715EDC62800BA315F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38489615EDC62800BA315F /* main.m */; };
 		FC38489B15EDC62800BA315F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FC38489A15EDC62800BA315F /* AppDelegate.m */; };
 		FC38489E15EDC62800BA315F /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */; };
-		FC3848A115EDC62800BA315F /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */; };
 		FC3848A415EDC62800BA315F /* MisfitReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC3848A215EDC62800BA315F /* MisfitReader.xcdatamodeld */; };
 		FC3848A715EDC62800BA315F /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3848A615EDC62800BA315F /* MasterViewController.m */; };
 		FC3848AA15EDC62800BA315F /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3848A915EDC62800BA315F /* DetailViewController.m */; };
@@ -130,6 +131,9 @@
 		FC0EA6F715FDA57C002F81A5 /* noise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noise.png; sourceTree = "<group>"; };
 		FC0EA70015FDCAD4002F81A5 /* SliderReadability.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SliderReadability.png; sourceTree = "<group>"; };
 		FC0EA70215FDCB52002F81A5 /* ButtonFonts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonFonts.png; sourceTree = "<group>"; };
+		FC233437160860B300C491BE /* TrapezoidView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrapezoidView.h; sourceTree = "<group>"; };
+		FC233438160860B300C491BE /* TrapezoidView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrapezoidView.m; sourceTree = "<group>"; };
+		FC233439160860B300C491BE /* TrapezoidView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrapezoidView.xib; sourceTree = "<group>"; };
 		FC38488415EDC62800BA315F /* MisfitReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MisfitReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC38488815EDC62800BA315F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FC38488A15EDC62800BA315F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -142,7 +146,6 @@
 		FC38489915EDC62800BA315F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FC38489A15EDC62800BA315F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		FC38489D15EDC62800BA315F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		FC3848A015EDC62800BA315F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		FC3848A315EDC62800BA315F /* MisfitReader.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MisfitReader.xcdatamodel; sourceTree = "<group>"; };
 		FC3848A515EDC62800BA315F /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		FC3848A615EDC62800BA315F /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
@@ -385,7 +388,6 @@
 				FC7156AE1602EB10007152EB /* AccountViewController.h */,
 				FC7156AF1602EB11007152EB /* AccountViewController.m */,
 				FC38489C15EDC62800BA315F /* MainStoryboard_iPhone.storyboard */,
-				FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */,
 				FC384AA715EDF34D00BA315F /* AddSubscriptionViewController.h */,
 				FC384AA815EDF34D00BA315F /* AddSubscriptionViewController.m */,
 				FC3848A515EDC62800BA315F /* MasterViewController.h */,
@@ -559,6 +561,9 @@
 		FC7156B21602EB61007152EB /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				FC233437160860B300C491BE /* TrapezoidView.h */,
+				FC233438160860B300C491BE /* TrapezoidView.m */,
+				FC233439160860B300C491BE /* TrapezoidView.xib */,
 				FC0EA6F315FDA0E8002F81A5 /* DefaultNavigationBar.h */,
 				FC0EA6F415FDA0E8002F81A5 /* DefaultNavigationBar.m */,
 				FC71568E1600A834007152EB /* DefaultToobar.h */,
@@ -646,7 +651,6 @@
 			files = (
 				FC38489515EDC62800BA315F /* InfoPlist.strings in Resources */,
 				FC38489E15EDC62800BA315F /* MainStoryboard_iPhone.storyboard in Resources */,
-				FC3848A115EDC62800BA315F /* MainStoryboard_iPad.storyboard in Resources */,
 				FC46017915F057BD00FB5DA6 /* action-black-button-selected.png in Resources */,
 				FC46017A15F057BD00FB5DA6 /* action-black-button-selected@2x.png in Resources */,
 				FC46017B15F057BD00FB5DA6 /* action-black-button.png in Resources */,
@@ -699,6 +703,7 @@
 				FC7156BD1603858E007152EB /* ButtonReadAll-landscape.png in Resources */,
 				FC7156BE1603858E007152EB /* ButtonReadAll.png in Resources */,
 				FCF3131E1604CDC500DCB95A /* icon.png in Resources */,
+				FC23343B160860B300C491BE /* TrapezoidView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -768,6 +773,7 @@
 				FC71569C16019D50007152EB /* Entry.m in Sources */,
 				FC7156AC16021FB6007152EB /* PopupView.m in Sources */,
 				FC7156B01602EB11007152EB /* AccountViewController.m in Sources */,
+				FC23343A160860B300C491BE /* TrapezoidView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,14 +810,6 @@
 				FC38489D15EDC62800BA315F /* en */,
 			);
 			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		FC38489F15EDC62800BA315F /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FC3848A015EDC62800BA315F /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		FC3848BB15EDC62800BA315F /* InfoPlist.strings */ = {

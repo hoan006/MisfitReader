@@ -25,7 +25,7 @@
 
 @property (strong, nonatomic) IBOutlet UIView *topBar;
 @property (strong, nonatomic) IBOutlet UIView *bottomBar;
-@property (strong, nonatomic) IBOutlet UIView *hiddenButton;
+@property (strong, nonatomic) IBOutlet UIButton *hiddenButton;
 
 @property (strong, nonatomic) IBOutlet UIWebView *contentWebView;
 @property (strong, nonatomic) IBOutlet PopupView *popupView;
